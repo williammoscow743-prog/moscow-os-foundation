@@ -83,7 +83,7 @@ export function ProjectCard({ project, onEdit, onDelete, onArchive, onComplete }
 
         <DropdownMenu>
           <DropdownMenuTrigger
-            className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground opacity-0 transition-opacity hover:bg-accent hover:text-foreground focus:opacity-100 group-hover:opacity-100"
+            className="grid h-8 w-8 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             aria-label="Project actions"
           >
             <MoreHorizontal className="h-4 w-4" />
