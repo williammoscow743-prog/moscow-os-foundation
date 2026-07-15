@@ -96,10 +96,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         property: "og:description",
         content:
-          "A modern business operating system to run projects, tasks, clients, finance and reports from one unified workspace.",
+          "Moscow OS is a modern business operating system for entrepreneurs. Manage projects, tasks, clients, finance and reports in one unified workspace.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Moscow OS — One Intelligent Workspace To Run Your Business" },
+      { name: "twitter:description", content: "Moscow OS is a modern business operating system for entrepreneurs. Manage projects, tasks, clients, finance and reports in one unified workspace." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6768480f-b422-41dd-b0f1-a749079acfd5/id-preview-a3f9c998--edef2e54-e28c-4584-b19e-2d8f2f9ede3f.lovable.app-1784153702290.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6768480f-b422-41dd-b0f1-a749079acfd5/id-preview-a3f9c998--edef2e54-e28c-4584-b19e-2d8f2f9ede3f.lovable.app-1784153702290.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
