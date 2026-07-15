@@ -113,6 +113,57 @@ export type Database = {
         }
         Relationships: []
       }
+      projects: {
+        Row: {
+          category: string | null
+          color: string | null
+          created_at: string
+          description: string | null
+          due_date: string | null
+          icon: string | null
+          id: string
+          name: string
+          priority: string
+          progress: number
+          start_date: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          priority?: string
+          progress?: number
+          start_date?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          priority?: string
+          progress?: number
+          start_date?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       settings: {
         Row: {
           created_at: string
