@@ -1,14 +1,25 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
-import { supabase } from "@/integrations/supabase/client";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { Loader2 } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/")({
-  beforeLoad: async () => {
-    if (typeof window === "undefined") return;
-    const { data } = await supabase.auth.getSession();
-    if (data.session) {
-      throw redirect({ to: "/dashboard" });
-    }
-    throw redirect({ to: "/auth" });
-  },
-  component: () => null,
+  ssr: false,
+  component: IndexRedirect,
 });
+
+function IndexRedirect() {
+  const { session, loading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (loading) return;
+    navigate({ to: session ? "/dashboard" : "/auth", replace: true });
+  }, [loading, session, navigate]);
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-background">
+      <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+    </div>
+  );
+}
