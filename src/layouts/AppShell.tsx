@@ -46,7 +46,7 @@ type NavItem = {
 
 const NAV: NavItem[] = [
   { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
-  { label: "Projects", to: "/projects", icon: FolderKanban, comingSoon: true },
+  { label: "Projects", to: "/projects", icon: FolderKanban },
   { label: "Tasks", to: "/tasks", icon: CheckSquare, comingSoon: true },
   { label: "Calendar", to: "/calendar", icon: Calendar, comingSoon: true },
   { label: "Clients", to: "/clients", icon: Users, comingSoon: true },
