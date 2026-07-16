@@ -1,5 +1,12 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
+import {
+  addDays,
+  isPast,
+  isWithinInterval,
+  startOfDay,
+} from "date-fns";
 import {
   ArrowUpRight,
   CheckCircle2,
@@ -10,12 +17,17 @@ import {
   FolderPlus,
   UserPlus,
   Calendar as CalIcon,
+  Target,
+  AlertTriangle,
+  CalendarClock,
 } from "lucide-react";
 
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { useAllMilestones } from "@/features/milestones/api";
+import type { MilestoneStatus } from "@/features/milestones/types";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   component: DashboardPage,
