@@ -51,6 +51,34 @@ function DashboardPage() {
     },
   });
 
+  const { data: milestones = [] } = useAllMilestones();
+
+  const milestoneStats = useMemo(() => {
+    const today = startOfDay(new Date());
+    const inSevenDays = addDays(today, 7);
+    let completed = 0;
+    let dueThisWeek = 0;
+    let overdue = 0;
+    let upcoming = 0;
+    for (const m of milestones) {
+      const status = m.status as MilestoneStatus;
+      if (status === "completed") {
+        completed += 1;
+        continue;
+      }
+      if (!m.due_date) continue;
+      const due = new Date(m.due_date);
+      if (isPast(due)) {
+        overdue += 1;
+      } else if (isWithinInterval(due, { start: today, end: inSevenDays })) {
+        dueThisWeek += 1;
+      } else {
+        upcoming += 1;
+      }
+    }
+    return { completed, dueThisWeek, overdue, upcoming };
+  }, [milestones]);
+
   const greeting = greetingFor(new Date());
   const displayName = profile?.full_name?.split(" ")[0] || user?.email?.split("@")[0] || "there";
 
