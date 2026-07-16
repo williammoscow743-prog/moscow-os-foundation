@@ -233,13 +233,16 @@ function FocusCard({
 function QuickAction({
   icon: Icon,
   label,
+  onClick,
 }: {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
+  onClick?: () => void;
 }) {
   return (
     <button
       type="button"
+      onClick={onClick}
       className="surface flex items-center gap-3 p-4 text-left transition-all hover:border-primary/40 hover:bg-accent"
     >
       <div className="grid h-9 w-9 place-items-center rounded-lg bg-primary/10 text-primary">
