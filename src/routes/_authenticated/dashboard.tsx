@@ -102,10 +102,10 @@ function DashboardPage() {
         <div className="lg:col-span-2 space-y-6">
           <Section title="Quick actions" subtitle="Jump in fast.">
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <QuickAction icon={FolderPlus} label="New project" />
-              <QuickAction icon={CheckCircle2} label="New task" />
-              <QuickAction icon={UserPlus} label="Add client" />
-              <QuickAction icon={CalIcon} label="Schedule" />
+              <QuickAction icon={FolderPlus} label="New project" onClick={() => navigate({ to: "/projects" })} />
+              <QuickAction icon={CheckCircle2} label="New task" onClick={() => navigate({ to: "/tasks" })} />
+              <QuickAction icon={UserPlus} label="Add client" onClick={() => navigate({ to: "/clients" })} />
+              <QuickAction icon={CalIcon} label="Schedule" onClick={() => navigate({ to: "/calendar" })} />
             </div>
           </Section>
 
