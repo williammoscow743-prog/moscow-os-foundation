@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
   ArrowUpRight,
@@ -24,6 +24,7 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 function DashboardPage() {
   const { user } = useAuth();
   const { data: profile } = useProfile();
+  const navigate = useNavigate();
 
   const { data: notifications } = useQuery({
     queryKey: ["notifications", user?.id],
@@ -61,11 +62,11 @@ function DashboardPage() {
           </p>
         </div>
         <div className="flex shrink-0 gap-2">
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={() => navigate({ to: "/reports" })}>
             <Sparkles className="mr-2 h-4 w-4" />
             Ask AI
           </Button>
-          <Button size="sm">
+          <Button size="sm" onClick={() => navigate({ to: "/projects" })}>
             <Plus className="mr-2 h-4 w-4" />
             New
           </Button>
@@ -101,10 +102,10 @@ function DashboardPage() {
         <div className="lg:col-span-2 space-y-6">
           <Section title="Quick actions" subtitle="Jump in fast.">
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <QuickAction icon={FolderPlus} label="New project" />
-              <QuickAction icon={CheckCircle2} label="New task" />
-              <QuickAction icon={UserPlus} label="Add client" />
-              <QuickAction icon={CalIcon} label="Schedule" />
+              <QuickAction icon={FolderPlus} label="New project" onClick={() => navigate({ to: "/projects" })} />
+              <QuickAction icon={CheckCircle2} label="New task" onClick={() => navigate({ to: "/tasks" })} />
+              <QuickAction icon={UserPlus} label="Add client" onClick={() => navigate({ to: "/clients" })} />
+              <QuickAction icon={CalIcon} label="Schedule" onClick={() => navigate({ to: "/calendar" })} />
             </div>
           </Section>
 
@@ -232,13 +233,16 @@ function FocusCard({
 function QuickAction({
   icon: Icon,
   label,
+  onClick,
 }: {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
+  onClick?: () => void;
 }) {
   return (
     <button
       type="button"
+      onClick={onClick}
       className="surface flex items-center gap-3 p-4 text-left transition-all hover:border-primary/40 hover:bg-accent"
     >
       <div className="grid h-9 w-9 place-items-center rounded-lg bg-primary/10 text-primary">
