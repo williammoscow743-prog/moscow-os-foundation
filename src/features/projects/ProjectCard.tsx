@@ -96,6 +96,11 @@ export function ProjectCard({ project, onEdit, onDelete, onArchive, onComplete }
             <MoreHorizontal className="h-4 w-4" />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-44">
+            <DropdownMenuItem asChild>
+              <Link to="/projects/$projectId" params={{ projectId: project.id }}>
+                <FolderKanban className="mr-2 h-4 w-4" /> Open
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={() => onEdit(project)}>
               <Pencil className="mr-2 h-4 w-4" /> Edit
             </DropdownMenuItem>
