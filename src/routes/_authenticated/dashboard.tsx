@@ -1,5 +1,12 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
+import {
+  addDays,
+  isPast,
+  isWithinInterval,
+  startOfDay,
+} from "date-fns";
 import {
   ArrowUpRight,
   CheckCircle2,
@@ -10,12 +17,17 @@ import {
   FolderPlus,
   UserPlus,
   Calendar as CalIcon,
+  Target,
+  AlertTriangle,
+  CalendarClock,
 } from "lucide-react";
 
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { useAllMilestones } from "@/features/milestones/api";
+import type { MilestoneStatus } from "@/features/milestones/types";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   component: DashboardPage,
@@ -38,6 +50,34 @@ function DashboardPage() {
       return data ?? [];
     },
   });
+
+  const { data: milestones = [] } = useAllMilestones();
+
+  const milestoneStats = useMemo(() => {
+    const today = startOfDay(new Date());
+    const inSevenDays = addDays(today, 7);
+    let completed = 0;
+    let dueThisWeek = 0;
+    let overdue = 0;
+    let upcoming = 0;
+    for (const m of milestones) {
+      const status = m.status as MilestoneStatus;
+      if (status === "completed") {
+        completed += 1;
+        continue;
+      }
+      if (!m.due_date) continue;
+      const due = new Date(m.due_date);
+      if (isPast(due)) {
+        overdue += 1;
+      } else if (isWithinInterval(due, { start: today, end: inSevenDays })) {
+        dueThisWeek += 1;
+      } else {
+        upcoming += 1;
+      }
+    }
+    return { completed, dueThisWeek, overdue, upcoming };
+  }, [milestones]);
 
   const greeting = greetingFor(new Date());
   const displayName = profile?.full_name?.split(" ")[0] || user?.email?.split("@")[0] || "there";
@@ -97,7 +137,36 @@ function DashboardPage() {
         </div>
       </Section>
 
-      {/* Quick actions + Recent + Upcoming */}
+      {/* Milestones overview */}
+      <Section title="Milestones" subtitle="Progress across your projects.">
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <FocusCard
+            label="Due this week"
+            value={String(milestoneStats.dueThisWeek)}
+            hint="Milestones landing in the next 7 days"
+            icon={CalendarClock}
+          />
+          <FocusCard
+            label="Completed"
+            value={String(milestoneStats.completed)}
+            hint="Milestones marked complete"
+            icon={CheckCircle2}
+          />
+          <FocusCard
+            label="Overdue"
+            value={String(milestoneStats.overdue)}
+            hint="Past due and not yet complete"
+            icon={AlertTriangle}
+          />
+          <FocusCard
+            label="Upcoming"
+            value={String(milestoneStats.upcoming)}
+            hint="Scheduled beyond this week"
+            icon={Target}
+          />
+        </div>
+      </Section>
+
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-6">
           <Section title="Quick actions" subtitle="Jump in fast.">
