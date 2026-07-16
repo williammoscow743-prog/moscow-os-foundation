@@ -137,7 +137,36 @@ function DashboardPage() {
         </div>
       </Section>
 
-      {/* Quick actions + Recent + Upcoming */}
+      {/* Milestones overview */}
+      <Section title="Milestones" subtitle="Progress across your projects.">
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <FocusCard
+            label="Due this week"
+            value={String(milestoneStats.dueThisWeek)}
+            hint="Milestones landing in the next 7 days"
+            icon={CalendarClock}
+          />
+          <FocusCard
+            label="Completed"
+            value={String(milestoneStats.completed)}
+            hint="Milestones marked complete"
+            icon={CheckCircle2}
+          />
+          <FocusCard
+            label="Overdue"
+            value={String(milestoneStats.overdue)}
+            hint="Past due and not yet complete"
+            icon={AlertTriangle}
+          />
+          <FocusCard
+            label="Upcoming"
+            value={String(milestoneStats.upcoming)}
+            hint="Scheduled beyond this week"
+            icon={Target}
+          />
+        </div>
+      </Section>
+
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-6">
           <Section title="Quick actions" subtitle="Jump in fast.">
