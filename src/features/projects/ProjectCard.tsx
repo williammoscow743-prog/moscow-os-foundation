@@ -75,7 +75,13 @@ export function ProjectCard({ project, onEdit, onDelete, onArchive, onComplete }
             <FolderKanban className="h-5 w-5" />
           </div>
           <div className="min-w-0">
-            <h3 className="truncate text-sm font-semibold tracking-tight">{project.name}</h3>
+            <Link
+              to="/projects/$projectId"
+              params={{ projectId: project.id }}
+              className="block truncate text-sm font-semibold tracking-tight hover:text-primary focus:outline-none focus-visible:text-primary"
+            >
+              {project.name}
+            </Link>
             <p className="mt-0.5 truncate text-xs text-muted-foreground">
               {project.category || "Uncategorized"}
             </p>
