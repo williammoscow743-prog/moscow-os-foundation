@@ -62,11 +62,11 @@ function DashboardPage() {
           </p>
         </div>
         <div className="flex shrink-0 gap-2">
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={() => navigate({ to: "/reports" })}>
             <Sparkles className="mr-2 h-4 w-4" />
             Ask AI
           </Button>
-          <Button size="sm">
+          <Button size="sm" onClick={() => navigate({ to: "/projects" })}>
             <Plus className="mr-2 h-4 w-4" />
             New
           </Button>
