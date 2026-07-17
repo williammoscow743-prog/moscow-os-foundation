@@ -1,0 +1,40 @@
+assets/branding/
+
+logo/
+
+primary/
+    moscow-os-light.svg
+    moscow-os-dark.svg
+
+symbol/
+    symbol-light.svg
+    symbol-dark.svg
+
+wordmark/
+    wordmark-light.svg
+    wordmark-dark.svg
+
+monochrome/
+    black.svg
+    white.svg
+
+favicon/
+    favicon.ico
+    favicon-32.png
+    favicon-16.png
+
+icons/
+    app-icon.png
+    github-avatar.png
+    social-icon.png
+
+banners/
+    github-banner.png
+    docs-banner.png
+
+templates/
+    document-cover.png
+    powerpoint-template.pptx
+
+brand-guidelines/
+    brand-guide.md
