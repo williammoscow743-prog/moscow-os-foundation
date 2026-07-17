@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useSearch } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
@@ -28,7 +28,7 @@ const forgotSchema = z.object({ email: z.string().email("Enter a valid email") }
 
 export function AuthForm() {
   const [mode, setMode] = useState<Mode>("signin");
-  const navigate = useNavigate();
+  
   const search = useSearch({ strict: false }) as { next?: string };
   const nextPath =
     typeof search.next === "string" && search.next.startsWith("/") && !search.next.startsWith("//")
