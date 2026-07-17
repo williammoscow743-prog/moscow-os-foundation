@@ -1,0 +1,53 @@
+docs/
+
+README.md
+
+architecture/
+    01-system-overview.md
+    02-software-requirements.md
+    03-architecture-design.md
+    04-technology-stack.md
+
+database/
+    schema.md
+    erd.md
+    rls-policies.md
+
+api/
+    api-reference.md
+
+mcp/
+    overview.md
+    authentication.md
+    tools.md
+    examples.md
+
+developer/
+    developer-handbook.md
+    coding-standards.md
+    git-workflow.md
+
+design/
+    design-system.md
+    ui-guidelines.md
+
+decisions/
+    AD-001.md
+    AD-002.md
+    AD-003.md
+
+qa/
+    testing-strategy.md
+    qa-checklists.md
+
+roadmap/
+    product-roadmap.md
+
+releases/
+    v0.1.0.md
+    v0.2.0.md
+
+sprints/
+    sprint-01/
+    sprint-02/
+    sprint-03/
