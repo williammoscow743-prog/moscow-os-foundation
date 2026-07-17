@@ -1,7 +1,6 @@
 assets/
 └── branding/
-    ├── logo/
-    │   ├── primary/
+    ├──  ├── primary/
     │   │   ├── moscow-os-logo-dark-v1.png
     │   │   ├── moscow-os-logo-light-v1.png
     │   │   ├── moscow-os-logo-dark-v1.svg
@@ -15,6 +14,6 @@ assets/
     │   │   ├── moscow-os-wordmark-dark-v1.png
     │   │   └── moscow-os-wordmark-light-v1.png
     │   │
-    │   └── monochrome/
-    │       ├── black.svg
-    │       └── white.svg
+    │ monochrome/
+    black.svg
+    │   white.svg
