@@ -1,0 +1,81 @@
+# Moscow OS Documentation
+
+moscow-os-foundation/
+│
+├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   └── workflows/
+│
+├── assets/
+│   ├── branding/
+│   │   ├── logo/
+│   │   │   ├── primary/
+│   │   │   ├── symbol/
+│   │   │   ├── wordmark/
+│   │   │   ├── monochrome/
+│   │   │   └── favicon/
+│   │   │
+│   │   ├── icons/
+│   │   │   ├── app/
+│   │   │   ├── github/
+│   │   │   └── social/
+│   │   │
+│   │   ├── banners/
+│   │   ├── colors/
+│   │   ├── typography/
+│   │   ├── templates/
+│   │   └── brand-guidelines/
+│   │
+│   ├── screenshots/
+│   ├── mockups/
+│   └── media/
+│
+├── database/
+│   ├── schema/
+│   ├── migrations/
+│   ├── seed/
+│   ├── functions/
+│   ├── policies/
+│   └── backups/
+│
+├── docs/
+│   ├── architecture/
+│   ├── api/
+│   ├── mcp/
+│   ├── database/
+│   ├── design/
+│   ├── developer/
+│   ├── decisions/
+│   ├── qa/
+│   ├── roadmap/
+│   ├── releases/
+│   ├── sprints/
+│   ├── meeting-notes/
+│   ├── handbooks/
+│   └── templates/
+│
+├── prompts/
+│   ├── loveable/
+│   ├── chatgpt/
+│   ├── claude/
+│   └── archive/
+│
+├── scripts/
+│
+├── tests/
+│   ├── unit/
+│   ├── integration/
+│   ├── e2e/
+│   └── performance/
+│
+├── src/
+│
+├── public/
+│
+├── CHANGELOG.md
+├── CONTRIBUTING.md
+├── LICENSE
+├── README.md
+├── ROADMAP.md
+└── SECURITY.md
