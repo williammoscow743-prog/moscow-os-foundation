@@ -45,6 +45,7 @@ import type {
   ProjectStatus,
 } from "@/features/projects/types";
 import { MilestonesPanel } from "@/features/milestones/MilestonesPanel";
+import { TasksPanel } from "@/features/tasks/TasksPanel";
 
 export const Route = createFileRoute("/_authenticated/projects/$projectId")({
   component: ProjectDetailsPage,
@@ -305,10 +306,7 @@ function ProjectDetailsPage() {
         </TabsContent>
 
         <TabsContent value="tasks">
-          <ComingSoonPanel
-            title="Tasks"
-            description="Break this project down into actionable tasks. Coming soon."
-          />
+          <TasksPanel projectId={project.id} />
         </TabsContent>
 
         <TabsContent value="notes">
