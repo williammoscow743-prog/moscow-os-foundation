@@ -81,7 +81,7 @@ export function TaskFormDialog({
   saving,
 }: Props) {
   const [form, setForm] = useState<FormState>(empty);
-  const { data: projects = [] } = useAllProjects();
+  const { data: projects = [] } = useProjects();
   const { data: milestones = [] } = useMilestones(form.project_id || undefined);
 
   useEffect(() => {
