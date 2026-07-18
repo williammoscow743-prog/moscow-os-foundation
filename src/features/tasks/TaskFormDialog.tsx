@@ -21,7 +21,7 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { TASK_PRIORITIES, TASK_STATUSES, type TaskRow } from "./types";
 import { useMilestones } from "@/features/milestones/api";
-import { useAllProjects } from "@/features/projects/api";
+import { useProjects } from "@/features/projects/api";
 
 type FormState = {
   title: string;
