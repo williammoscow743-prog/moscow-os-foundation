@@ -1,0 +1,14 @@
+import { useEffect, useState } from "react";
+
+/**
+ * Debounces a rapidly-changing value (e.g. search input) to reduce
+ * re-renders and API calls.
+ */
+export function useDebouncedValue<T>(value: T, delayMs = 250): T {
+  const [debounced, setDebounced] = useState(value);
+  useEffect(() => {
+    const id = setTimeout(() => setDebounced(value), delayMs);
+    return () => clearTimeout(id);
+  }, [value, delayMs]);
+  return debounced;
+}
