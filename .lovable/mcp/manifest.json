@@ -12,7 +12,7 @@
   "mcp": {
     "server": {
       "name": "moscow-os-mcp",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "title": "Moscow OS"
     },
     "tools": [
@@ -453,6 +453,294 @@
           },
           "required": [
             "id"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_expenses",
+        "title": "List expenses",
+        "description": "List expenses for the signed-in user, optionally filtered by category or date range.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "category": {
+              "type": "string"
+            },
+            "from": {
+              "type": "string",
+              "description": "ISO date lower bound (inclusive)."
+            },
+            "to": {
+              "type": "string",
+              "description": "ISO date upper bound (inclusive)."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 500
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_expense",
+        "title": "Create expense",
+        "description": "Record a new expense for the signed-in user.",
+        "annotations": {
+          "readOnlyHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "amount": {
+              "type": "number",
+              "minimum": 0
+            },
+            "currency": {
+              "type": "string",
+              "default": "USD"
+            },
+            "category": {
+              "type": "string",
+              "default": "other"
+            },
+            "expense_date": {
+              "type": "string",
+              "description": "ISO date; defaults to today."
+            },
+            "vendor": {
+              "type": "string"
+            },
+            "payment_method": {
+              "type": "string"
+            },
+            "project_id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": {
+              "type": "string"
+            },
+            "notes": {
+              "type": "string"
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "name",
+            "amount"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_bills",
+        "title": "List bills",
+        "description": "List bills for the signed-in user, optionally filtered by status.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "upcoming",
+                "due_today",
+                "overdue",
+                "paid",
+                "cancelled"
+              ]
+            },
+            "include_archived": {
+              "type": "boolean"
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 500
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_bill",
+        "title": "Create bill",
+        "description": "Create a bill for the signed-in user.",
+        "annotations": {
+          "readOnlyHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "amount": {
+              "type": "number",
+              "minimum": 0
+            },
+            "due_date": {
+              "type": "string",
+              "description": "ISO date."
+            },
+            "currency": {
+              "type": "string",
+              "default": "USD"
+            },
+            "category": {
+              "type": "string",
+              "default": "other"
+            },
+            "frequency": {
+              "type": "string",
+              "enum": [
+                "once",
+                "weekly",
+                "monthly",
+                "quarterly",
+                "yearly"
+              ],
+              "default": "once"
+            },
+            "vendor": {
+              "type": "string"
+            },
+            "notes": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "amount",
+            "due_date"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "mark_bill_paid",
+        "title": "Mark bill paid",
+        "description": "Mark a bill as paid for the signed-in user.",
+        "annotations": {
+          "readOnlyHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "bill_id": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "required": [
+            "bill_id"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_income",
+        "title": "List income",
+        "description": "List income entries for the signed-in user.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string"
+            },
+            "to": {
+              "type": "string"
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 500
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_income",
+        "title": "Create income",
+        "description": "Record an income entry for the signed-in user.",
+        "annotations": {
+          "readOnlyHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "source": {
+              "type": "string",
+              "minLength": 1
+            },
+            "amount": {
+              "type": "number",
+              "minimum": 0
+            },
+            "currency": {
+              "type": "string",
+              "default": "USD"
+            },
+            "category": {
+              "type": "string",
+              "default": "other"
+            },
+            "received_date": {
+              "type": "string"
+            },
+            "project_id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "notes": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "source",
+            "amount"
           ],
           "additionalProperties": false,
           "$schema": "http://json-schema.org/draft-07/schema#"

@@ -50,7 +50,7 @@ const NAV: NavItem[] = [
   { label: "Tasks", to: "/tasks", icon: CheckSquare, comingSoon: true },
   { label: "Calendar", to: "/calendar", icon: Calendar, comingSoon: true },
   { label: "Clients", to: "/clients", icon: Users, comingSoon: true },
-  { label: "Finance", to: "/finance", icon: Wallet, comingSoon: true },
+  { label: "Finance", to: "/finance", icon: Wallet },
   { label: "Reports", to: "/reports", icon: BarChart3, comingSoon: true },
   { label: "Settings", to: "/settings", icon: Settings },
 ];
