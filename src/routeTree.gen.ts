@@ -24,7 +24,15 @@ import { Route as AuthenticatedClientsRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedCalendarRouteImport } from './routes/_authenticated/calendar'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as AuthenticatedFinanceIndexRouteImport } from './routes/_authenticated/finance.index'
 import { Route as AuthenticatedProjectsProjectIdRouteImport } from './routes/_authenticated/projects.$projectId'
+import { Route as AuthenticatedFinanceReportsRouteImport } from './routes/_authenticated/finance.reports'
+import { Route as AuthenticatedFinanceIncomeRouteImport } from './routes/_authenticated/finance.income'
+import { Route as AuthenticatedFinanceExpensesRouteImport } from './routes/_authenticated/finance.expenses'
+import { Route as AuthenticatedFinanceCategoriesRouteImport } from './routes/_authenticated/finance.categories'
+import { Route as AuthenticatedFinanceCashFlowRouteImport } from './routes/_authenticated/finance.cash-flow'
+import { Route as AuthenticatedFinanceBudgetsRouteImport } from './routes/_authenticated/finance.budgets'
+import { Route as AuthenticatedFinanceBillsRouteImport } from './routes/_authenticated/finance.bills'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 
@@ -104,11 +112,59 @@ const Char91DotmcpChar93ListToolsRoute =
     path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AuthenticatedFinanceIndexRoute =
+  AuthenticatedFinanceIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedFinanceRoute,
+  } as any)
 const AuthenticatedProjectsProjectIdRoute =
   AuthenticatedProjectsProjectIdRouteImport.update({
     id: '/$projectId',
     path: '/$projectId',
     getParentRoute: () => AuthenticatedProjectsRoute,
+  } as any)
+const AuthenticatedFinanceReportsRoute =
+  AuthenticatedFinanceReportsRouteImport.update({
+    id: '/reports',
+    path: '/reports',
+    getParentRoute: () => AuthenticatedFinanceRoute,
+  } as any)
+const AuthenticatedFinanceIncomeRoute =
+  AuthenticatedFinanceIncomeRouteImport.update({
+    id: '/income',
+    path: '/income',
+    getParentRoute: () => AuthenticatedFinanceRoute,
+  } as any)
+const AuthenticatedFinanceExpensesRoute =
+  AuthenticatedFinanceExpensesRouteImport.update({
+    id: '/expenses',
+    path: '/expenses',
+    getParentRoute: () => AuthenticatedFinanceRoute,
+  } as any)
+const AuthenticatedFinanceCategoriesRoute =
+  AuthenticatedFinanceCategoriesRouteImport.update({
+    id: '/categories',
+    path: '/categories',
+    getParentRoute: () => AuthenticatedFinanceRoute,
+  } as any)
+const AuthenticatedFinanceCashFlowRoute =
+  AuthenticatedFinanceCashFlowRouteImport.update({
+    id: '/cash-flow',
+    path: '/cash-flow',
+    getParentRoute: () => AuthenticatedFinanceRoute,
+  } as any)
+const AuthenticatedFinanceBudgetsRoute =
+  AuthenticatedFinanceBudgetsRouteImport.update({
+    id: '/budgets',
+    path: '/budgets',
+    getParentRoute: () => AuthenticatedFinanceRoute,
+  } as any)
+const AuthenticatedFinanceBillsRoute =
+  AuthenticatedFinanceBillsRouteImport.update({
+    id: '/bills',
+    path: '/bills',
+    getParentRoute: () => AuthenticatedFinanceRoute,
   } as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
   Char91DotmcpChar93InvokeToolToolRouteImport.update({
@@ -132,14 +188,22 @@ export interface FileRoutesByFullPath {
   '/calendar': typeof AuthenticatedCalendarRoute
   '/clients': typeof AuthenticatedClientsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/finance': typeof AuthenticatedFinanceRoute
+  '/finance': typeof AuthenticatedFinanceRouteWithChildren
   '/projects': typeof AuthenticatedProjectsRouteWithChildren
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/tasks': typeof AuthenticatedTasksRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/finance/bills': typeof AuthenticatedFinanceBillsRoute
+  '/finance/budgets': typeof AuthenticatedFinanceBudgetsRoute
+  '/finance/cash-flow': typeof AuthenticatedFinanceCashFlowRoute
+  '/finance/categories': typeof AuthenticatedFinanceCategoriesRoute
+  '/finance/expenses': typeof AuthenticatedFinanceExpensesRoute
+  '/finance/income': typeof AuthenticatedFinanceIncomeRoute
+  '/finance/reports': typeof AuthenticatedFinanceReportsRoute
   '/projects/$projectId': typeof AuthenticatedProjectsProjectIdRoute
+  '/finance/': typeof AuthenticatedFinanceIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -151,14 +215,21 @@ export interface FileRoutesByTo {
   '/calendar': typeof AuthenticatedCalendarRoute
   '/clients': typeof AuthenticatedClientsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/finance': typeof AuthenticatedFinanceRoute
   '/projects': typeof AuthenticatedProjectsRouteWithChildren
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/tasks': typeof AuthenticatedTasksRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/finance/bills': typeof AuthenticatedFinanceBillsRoute
+  '/finance/budgets': typeof AuthenticatedFinanceBudgetsRoute
+  '/finance/cash-flow': typeof AuthenticatedFinanceCashFlowRoute
+  '/finance/categories': typeof AuthenticatedFinanceCategoriesRoute
+  '/finance/expenses': typeof AuthenticatedFinanceExpensesRoute
+  '/finance/income': typeof AuthenticatedFinanceIncomeRoute
+  '/finance/reports': typeof AuthenticatedFinanceReportsRoute
   '/projects/$projectId': typeof AuthenticatedProjectsProjectIdRoute
+  '/finance': typeof AuthenticatedFinanceIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -172,14 +243,22 @@ export interface FileRoutesById {
   '/_authenticated/calendar': typeof AuthenticatedCalendarRoute
   '/_authenticated/clients': typeof AuthenticatedClientsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
-  '/_authenticated/finance': typeof AuthenticatedFinanceRoute
+  '/_authenticated/finance': typeof AuthenticatedFinanceRouteWithChildren
   '/_authenticated/projects': typeof AuthenticatedProjectsRouteWithChildren
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/tasks': typeof AuthenticatedTasksRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/_authenticated/finance/bills': typeof AuthenticatedFinanceBillsRoute
+  '/_authenticated/finance/budgets': typeof AuthenticatedFinanceBudgetsRoute
+  '/_authenticated/finance/cash-flow': typeof AuthenticatedFinanceCashFlowRoute
+  '/_authenticated/finance/categories': typeof AuthenticatedFinanceCategoriesRoute
+  '/_authenticated/finance/expenses': typeof AuthenticatedFinanceExpensesRoute
+  '/_authenticated/finance/income': typeof AuthenticatedFinanceIncomeRoute
+  '/_authenticated/finance/reports': typeof AuthenticatedFinanceReportsRoute
   '/_authenticated/projects/$projectId': typeof AuthenticatedProjectsProjectIdRoute
+  '/_authenticated/finance/': typeof AuthenticatedFinanceIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -200,7 +279,15 @@ export interface FileRouteTypes {
     | '/tasks'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/finance/bills'
+    | '/finance/budgets'
+    | '/finance/cash-flow'
+    | '/finance/categories'
+    | '/finance/expenses'
+    | '/finance/income'
+    | '/finance/reports'
     | '/projects/$projectId'
+    | '/finance/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -212,14 +299,21 @@ export interface FileRouteTypes {
     | '/calendar'
     | '/clients'
     | '/dashboard'
-    | '/finance'
     | '/projects'
     | '/reports'
     | '/settings'
     | '/tasks'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/finance/bills'
+    | '/finance/budgets'
+    | '/finance/cash-flow'
+    | '/finance/categories'
+    | '/finance/expenses'
+    | '/finance/income'
+    | '/finance/reports'
     | '/projects/$projectId'
+    | '/finance'
   id:
     | '__root__'
     | '/'
@@ -239,7 +333,15 @@ export interface FileRouteTypes {
     | '/_authenticated/tasks'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/_authenticated/finance/bills'
+    | '/_authenticated/finance/budgets'
+    | '/_authenticated/finance/cash-flow'
+    | '/_authenticated/finance/categories'
+    | '/_authenticated/finance/expenses'
+    | '/_authenticated/finance/income'
+    | '/_authenticated/finance/reports'
     | '/_authenticated/projects/$projectId'
+    | '/_authenticated/finance/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -361,12 +463,68 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/finance/': {
+      id: '/_authenticated/finance/'
+      path: '/'
+      fullPath: '/finance/'
+      preLoaderRoute: typeof AuthenticatedFinanceIndexRouteImport
+      parentRoute: typeof AuthenticatedFinanceRoute
+    }
     '/_authenticated/projects/$projectId': {
       id: '/_authenticated/projects/$projectId'
       path: '/$projectId'
       fullPath: '/projects/$projectId'
       preLoaderRoute: typeof AuthenticatedProjectsProjectIdRouteImport
       parentRoute: typeof AuthenticatedProjectsRoute
+    }
+    '/_authenticated/finance/reports': {
+      id: '/_authenticated/finance/reports'
+      path: '/reports'
+      fullPath: '/finance/reports'
+      preLoaderRoute: typeof AuthenticatedFinanceReportsRouteImport
+      parentRoute: typeof AuthenticatedFinanceRoute
+    }
+    '/_authenticated/finance/income': {
+      id: '/_authenticated/finance/income'
+      path: '/income'
+      fullPath: '/finance/income'
+      preLoaderRoute: typeof AuthenticatedFinanceIncomeRouteImport
+      parentRoute: typeof AuthenticatedFinanceRoute
+    }
+    '/_authenticated/finance/expenses': {
+      id: '/_authenticated/finance/expenses'
+      path: '/expenses'
+      fullPath: '/finance/expenses'
+      preLoaderRoute: typeof AuthenticatedFinanceExpensesRouteImport
+      parentRoute: typeof AuthenticatedFinanceRoute
+    }
+    '/_authenticated/finance/categories': {
+      id: '/_authenticated/finance/categories'
+      path: '/categories'
+      fullPath: '/finance/categories'
+      preLoaderRoute: typeof AuthenticatedFinanceCategoriesRouteImport
+      parentRoute: typeof AuthenticatedFinanceRoute
+    }
+    '/_authenticated/finance/cash-flow': {
+      id: '/_authenticated/finance/cash-flow'
+      path: '/cash-flow'
+      fullPath: '/finance/cash-flow'
+      preLoaderRoute: typeof AuthenticatedFinanceCashFlowRouteImport
+      parentRoute: typeof AuthenticatedFinanceRoute
+    }
+    '/_authenticated/finance/budgets': {
+      id: '/_authenticated/finance/budgets'
+      path: '/budgets'
+      fullPath: '/finance/budgets'
+      preLoaderRoute: typeof AuthenticatedFinanceBudgetsRouteImport
+      parentRoute: typeof AuthenticatedFinanceRoute
+    }
+    '/_authenticated/finance/bills': {
+      id: '/_authenticated/finance/bills'
+      path: '/bills'
+      fullPath: '/finance/bills'
+      preLoaderRoute: typeof AuthenticatedFinanceBillsRouteImport
+      parentRoute: typeof AuthenticatedFinanceRoute
     }
     '/.mcp/invoke-tool/$tool': {
       id: '/.mcp/invoke-tool/$tool'
@@ -385,6 +543,31 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedFinanceRouteChildren {
+  AuthenticatedFinanceBillsRoute: typeof AuthenticatedFinanceBillsRoute
+  AuthenticatedFinanceBudgetsRoute: typeof AuthenticatedFinanceBudgetsRoute
+  AuthenticatedFinanceCashFlowRoute: typeof AuthenticatedFinanceCashFlowRoute
+  AuthenticatedFinanceCategoriesRoute: typeof AuthenticatedFinanceCategoriesRoute
+  AuthenticatedFinanceExpensesRoute: typeof AuthenticatedFinanceExpensesRoute
+  AuthenticatedFinanceIncomeRoute: typeof AuthenticatedFinanceIncomeRoute
+  AuthenticatedFinanceReportsRoute: typeof AuthenticatedFinanceReportsRoute
+  AuthenticatedFinanceIndexRoute: typeof AuthenticatedFinanceIndexRoute
+}
+
+const AuthenticatedFinanceRouteChildren: AuthenticatedFinanceRouteChildren = {
+  AuthenticatedFinanceBillsRoute: AuthenticatedFinanceBillsRoute,
+  AuthenticatedFinanceBudgetsRoute: AuthenticatedFinanceBudgetsRoute,
+  AuthenticatedFinanceCashFlowRoute: AuthenticatedFinanceCashFlowRoute,
+  AuthenticatedFinanceCategoriesRoute: AuthenticatedFinanceCategoriesRoute,
+  AuthenticatedFinanceExpensesRoute: AuthenticatedFinanceExpensesRoute,
+  AuthenticatedFinanceIncomeRoute: AuthenticatedFinanceIncomeRoute,
+  AuthenticatedFinanceReportsRoute: AuthenticatedFinanceReportsRoute,
+  AuthenticatedFinanceIndexRoute: AuthenticatedFinanceIndexRoute,
+}
+
+const AuthenticatedFinanceRouteWithChildren =
+  AuthenticatedFinanceRoute._addFileChildren(AuthenticatedFinanceRouteChildren)
+
 interface AuthenticatedProjectsRouteChildren {
   AuthenticatedProjectsProjectIdRoute: typeof AuthenticatedProjectsProjectIdRoute
 }
@@ -402,7 +585,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedCalendarRoute: typeof AuthenticatedCalendarRoute
   AuthenticatedClientsRoute: typeof AuthenticatedClientsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
-  AuthenticatedFinanceRoute: typeof AuthenticatedFinanceRoute
+  AuthenticatedFinanceRoute: typeof AuthenticatedFinanceRouteWithChildren
   AuthenticatedProjectsRoute: typeof AuthenticatedProjectsRouteWithChildren
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
@@ -413,7 +596,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCalendarRoute: AuthenticatedCalendarRoute,
   AuthenticatedClientsRoute: AuthenticatedClientsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
-  AuthenticatedFinanceRoute: AuthenticatedFinanceRoute,
+  AuthenticatedFinanceRoute: AuthenticatedFinanceRouteWithChildren,
   AuthenticatedProjectsRoute: AuthenticatedProjectsRouteWithChildren,
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
