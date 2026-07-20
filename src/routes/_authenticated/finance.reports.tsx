@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useBills, useBudgets, useExpenses, useIncome, useSaveFinanceReport } from "@/features/finance/api";
+import { useBills, useBudgets, useExpenses, useFinanceReports, useIncome, useSaveFinanceReport } from "@/features/finance/api";
 import { deriveBillStatus, downloadCsv, toCsv } from "@/features/finance/utils";
 import { EXPENSE_CATEGORY_LABELS } from "@/features/finance/types";
 import { formatCurrency, formatDate } from "@/utils/format";
@@ -195,7 +195,7 @@ function ReportsPage() {
 }
 
 function SavedReports() {
-  const { data: reports = [] } = require("@/features/finance/api").useFinanceReports() as { data: import("@/features/finance/types").FinanceReportRow[] };
+  const { data: reports = [] } = useFinanceReports();
   if (reports.length === 0) return null;
   return (
     <div className="surface p-5">
