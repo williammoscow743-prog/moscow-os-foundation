@@ -136,7 +136,7 @@ function CashFlowPage() {
               <Tooltip formatter={(v: number) => formatCurrency(v)} />
               <Bar dataKey="net" radius={[4, 4, 0, 0]}>
                 {series.map((r, i) => (
-                  <rect key={i} fill={r.net >= 0 ? "#22C55E" : "#F04848"} />
+                  <Cell key={i} fill={r.net >= 0 ? "#22C55E" : "#F04848"} />
                 ))}
               </Bar>
             </BarChart>
