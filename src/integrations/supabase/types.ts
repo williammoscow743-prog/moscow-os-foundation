@@ -14,6 +14,125 @@ export type Database = {
   }
   public: {
     Tables: {
+      bills: {
+        Row: {
+          amount: number
+          archived: boolean
+          category: string
+          created_at: string
+          currency: string
+          description: string | null
+          due_date: string
+          frequency: string
+          id: string
+          name: string
+          next_due_date: string | null
+          notes: string | null
+          paid_at: string | null
+          project_id: string | null
+          snoozed_until: string | null
+          status: string
+          updated_at: string
+          user_id: string
+          vendor: string | null
+        }
+        Insert: {
+          amount?: number
+          archived?: boolean
+          category?: string
+          created_at?: string
+          currency?: string
+          description?: string | null
+          due_date: string
+          frequency?: string
+          id?: string
+          name: string
+          next_due_date?: string | null
+          notes?: string | null
+          paid_at?: string | null
+          project_id?: string | null
+          snoozed_until?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+          vendor?: string | null
+        }
+        Update: {
+          amount?: number
+          archived?: boolean
+          category?: string
+          created_at?: string
+          currency?: string
+          description?: string | null
+          due_date?: string
+          frequency?: string
+          id?: string
+          name?: string
+          next_due_date?: string | null
+          notes?: string | null
+          paid_at?: string | null
+          project_id?: string | null
+          snoozed_until?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+          vendor?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bills_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      budgets: {
+        Row: {
+          alert_thresholds: number[]
+          amount: number
+          category: string
+          created_at: string
+          currency: string
+          end_date: string | null
+          id: string
+          notes: string | null
+          period: string
+          start_date: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          alert_thresholds?: number[]
+          amount?: number
+          category: string
+          created_at?: string
+          currency?: string
+          end_date?: string | null
+          id?: string
+          notes?: string | null
+          period?: string
+          start_date?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          alert_thresholds?: number[]
+          amount?: number
+          category?: string
+          created_at?: string
+          currency?: string
+          end_date?: string | null
+          id?: string
+          notes?: string | null
+          period?: string
+          start_date?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       businesses: {
         Row: {
           created_at: string
@@ -46,6 +165,253 @@ export type Database = {
           website?: string | null
         }
         Relationships: []
+      }
+      cash_flow_snapshots: {
+        Row: {
+          closing_balance: number
+          created_at: string
+          currency: string
+          expense_total: number
+          id: string
+          income_total: number
+          notes: string | null
+          opening_balance: number
+          period_end: string
+          period_start: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          closing_balance?: number
+          created_at?: string
+          currency?: string
+          expense_total?: number
+          id?: string
+          income_total?: number
+          notes?: string | null
+          opening_balance?: number
+          period_end: string
+          period_start: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          closing_balance?: number
+          created_at?: string
+          currency?: string
+          expense_total?: number
+          id?: string
+          income_total?: number
+          notes?: string | null
+          opening_balance?: number
+          period_end?: string
+          period_start?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      expense_categories: {
+        Row: {
+          color: string | null
+          created_at: string
+          icon: string | null
+          id: string
+          is_default: boolean
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          icon?: string | null
+          id?: string
+          is_default?: boolean
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          icon?: string | null
+          id?: string
+          is_default?: boolean
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      expenses: {
+        Row: {
+          amount: number
+          category: string
+          client_id: string | null
+          created_at: string
+          currency: string
+          description: string | null
+          expense_date: string
+          id: string
+          name: string
+          notes: string | null
+          payment_method: string | null
+          project_id: string | null
+          receipt_url: string | null
+          tags: string[]
+          updated_at: string
+          user_id: string
+          vendor: string | null
+        }
+        Insert: {
+          amount?: number
+          category?: string
+          client_id?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          expense_date?: string
+          id?: string
+          name: string
+          notes?: string | null
+          payment_method?: string | null
+          project_id?: string | null
+          receipt_url?: string | null
+          tags?: string[]
+          updated_at?: string
+          user_id: string
+          vendor?: string | null
+        }
+        Update: {
+          amount?: number
+          category?: string
+          client_id?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          expense_date?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          payment_method?: string | null
+          project_id?: string | null
+          receipt_url?: string | null
+          tags?: string[]
+          updated_at?: string
+          user_id?: string
+          vendor?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expenses_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      finance_reports: {
+        Row: {
+          created_at: string
+          file_url: string | null
+          filters: Json
+          generated_at: string
+          id: string
+          name: string
+          period_end: string | null
+          period_start: string | null
+          summary: Json
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          file_url?: string | null
+          filters?: Json
+          generated_at?: string
+          id?: string
+          name: string
+          period_end?: string | null
+          period_start?: string | null
+          summary?: Json
+          type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          file_url?: string | null
+          filters?: Json
+          generated_at?: string
+          id?: string
+          name?: string
+          period_end?: string | null
+          period_start?: string | null
+          summary?: Json
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      income: {
+        Row: {
+          amount: number
+          category: string
+          client_id: string | null
+          created_at: string
+          currency: string
+          description: string | null
+          id: string
+          notes: string | null
+          project_id: string | null
+          received_date: string
+          source: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          category?: string
+          client_id?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          notes?: string | null
+          project_id?: string | null
+          received_date?: string
+          source: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          category?: string
+          client_id?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          notes?: string | null
+          project_id?: string | null
+          received_date?: string
+          source?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "income_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       milestones: {
         Row: {
@@ -162,6 +528,7 @@ export type Database = {
       }
       projects: {
         Row: {
+          budget: number | null
           category: string | null
           color: string | null
           created_at: string
@@ -178,6 +545,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          budget?: number | null
           category?: string | null
           color?: string | null
           created_at?: string
@@ -194,6 +562,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          budget?: number | null
           category?: string | null
           color?: string | null
           created_at?: string
