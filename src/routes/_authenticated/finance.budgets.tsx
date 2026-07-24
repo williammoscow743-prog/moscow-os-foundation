@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Plus, MoreHorizontal, Pencil, Trash2, AlertTriangle } from "lucide-react";
+import { Plus, MoreHorizontal, Pencil, Trash2, AlertTriangle, FileText } from "lucide-react";
+import { useFinancePdfExport } from "@/features/finance/use-pdf-export";
 import { toast } from "sonner";
 import { parseISO, startOfMonth } from "date-fns";
 import { Button } from "@/components/ui/button";
@@ -33,6 +34,7 @@ function BudgetsPage() {
   const create = useCreateBudget();
   const update = useUpdateBudget();
   const remove = useDeleteBudget();
+  const exportPdf = useFinancePdfExport();
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<BudgetRow | null>(null);
@@ -64,9 +66,38 @@ function BudgetsPage() {
     }
   };
 
+  const handleExportPdf = () => {
+    exportPdf({
+      title: "Budget Report",
+      periodLabel: "Current period",
+      columns: [
+        { header: "Category", key: "category_label" },
+        { header: "Period", key: "period" },
+        { header: "Budget", key: "amount", format: "currency", currencyKey: "currency", align: "right" },
+        { header: "Spent", key: "spent", format: "currency", currencyKey: "currency", align: "right" },
+        { header: "Remaining", key: "remaining", format: "currency", currencyKey: "currency", align: "right" },
+        { header: "% used", key: "pct_label", align: "right" },
+      ],
+      rows: withUsage.map((b) => ({
+        ...b,
+        category_label: EXPENSE_CATEGORY_LABELS[b.category] ?? b.category,
+        pct_label: `${b.pct.toFixed(0)}%`,
+      })),
+      totals: [
+        { label: "Budgets", value: String(withUsage.length) },
+        { label: "Total budgeted", value: formatCurrency(withUsage.reduce((s, b) => s + Number(b.amount), 0)) },
+        { label: "Total spent", value: formatCurrency(withUsage.reduce((s, b) => s + b.spent, 0)) },
+      ],
+      filename: `budgets-${new Date().toISOString().slice(0, 10)}.pdf`,
+    });
+  };
+
   return (
     <div className="space-y-4">
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-2">
+        <Button variant="outline" onClick={handleExportPdf}>
+          <FileText className="mr-2 h-4 w-4" /> PDF
+        </Button>
         <Button onClick={() => { setEditing(null); setDialogOpen(true); }}>
           <Plus className="mr-2 h-4 w-4" /> New budget
         </Button>

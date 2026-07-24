@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Plus, Search, Download, MoreHorizontal, Copy, Pencil, Trash2 } from "lucide-react";
+import { Plus, Search, Download, FileText, MoreHorizontal, Copy, Pencil, Trash2 } from "lucide-react";
+import { useFinancePdfExport } from "@/features/finance/use-pdf-export";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,6 +47,7 @@ function ExpensesPage() {
   const create = useCreateExpense();
   const update = useUpdateExpense();
   const remove = useDeleteExpense();
+  const exportPdf = useFinancePdfExport();
 
   const [q, setQ] = useState("");
   const [category, setCategory] = useState<string>("all");
@@ -126,6 +128,31 @@ function ExpensesPage() {
     downloadCsv(`expenses-${new Date().toISOString().slice(0, 10)}.csv`, toCsv(rows));
   };
 
+  const handleExportPdf = () => {
+    exportPdf({
+      title: "Expense Report",
+      subtitle: category === "all" ? "All categories" : `Category: ${EXPENSE_CATEGORY_LABELS[category] ?? category}`,
+      periodLabel: "All time",
+      columns: [
+        { header: "Name", key: "name" },
+        { header: "Category", key: "category" },
+        { header: "Vendor", key: "vendor" },
+        { header: "Date", key: "expense_date", format: "date" },
+        { header: "Amount", key: "amount", format: "currency", currencyKey: "currency", align: "right" },
+      ],
+      rows: filtered.map((e) => ({
+        ...e,
+        category: EXPENSE_CATEGORY_LABELS[e.category] ?? e.category,
+        vendor: e.vendor ?? "—",
+      })),
+      totals: [
+        { label: "Entries", value: String(filtered.length) },
+        { label: "Total", value: formatCurrency(total) },
+      ],
+      filename: `expenses-${new Date().toISOString().slice(0, 10)}.pdf`,
+    });
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-2">
@@ -150,7 +177,10 @@ function ExpensesPage() {
           </SelectContent>
         </Select>
         <Button variant="outline" onClick={handleExport}>
-          <Download className="mr-2 h-4 w-4" /> Export CSV
+          <Download className="mr-2 h-4 w-4" /> CSV
+        </Button>
+        <Button variant="outline" onClick={handleExportPdf}>
+          <FileText className="mr-2 h-4 w-4" /> PDF
         </Button>
         <Button onClick={() => { setEditing(null); setDialogOpen(true); }}>
           <Plus className="mr-2 h-4 w-4" /> Add expense

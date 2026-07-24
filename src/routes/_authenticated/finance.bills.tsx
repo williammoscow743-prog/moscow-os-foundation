@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Plus, Search, MoreHorizontal, Copy, Pencil, Trash2, Check, Archive, CalendarPlus } from "lucide-react";
+import { Plus, Search, MoreHorizontal, Copy, Pencil, Trash2, Check, Archive, CalendarPlus, FileText } from "lucide-react";
+import { useFinancePdfExport } from "@/features/finance/use-pdf-export";
 import { toast } from "sonner";
 import { addDays } from "date-fns";
 import { Button } from "@/components/ui/button";
@@ -55,6 +56,7 @@ function BillsPage() {
   const update = useUpdateBill();
   const markPaid = useMarkBillPaid();
   const remove = useDeleteBill();
+  const exportPdf = useFinancePdfExport();
 
   const [q, setQ] = useState("");
   const [status, setStatus] = useState<string>("all");
@@ -118,6 +120,36 @@ function BillsPage() {
     toast.success("Duplicated");
   };
 
+  const totalOutstanding = filtered
+    .filter((b) => b.derived !== "paid" && b.derived !== "cancelled")
+    .reduce((s, b) => s + Number(b.amount), 0);
+
+  const handleExportPdf = () => {
+    exportPdf({
+      title: "Bills Report",
+      subtitle: status === "all" ? "All statuses" : `Status: ${BILL_STATUS_LABELS[status as keyof typeof BILL_STATUS_LABELS] ?? status}`,
+      periodLabel: "All bills",
+      columns: [
+        { header: "Name", key: "name" },
+        { header: "Status", key: "derived_label" },
+        { header: "Frequency", key: "frequency" },
+        { header: "Due", key: "due_date", format: "date" },
+        { header: "Category", key: "category_label" },
+        { header: "Amount", key: "amount", format: "currency", currencyKey: "currency", align: "right" },
+      ],
+      rows: filtered.map((b) => ({
+        ...b,
+        derived_label: BILL_STATUS_LABELS[b.derived],
+        category_label: EXPENSE_CATEGORY_LABELS[b.category] ?? b.category,
+      })),
+      totals: [
+        { label: "Entries", value: String(filtered.length) },
+        { label: "Outstanding", value: formatCurrency(totalOutstanding) },
+      ],
+      filename: `bills-${new Date().toISOString().slice(0, 10)}.pdf`,
+    });
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-2">
@@ -136,6 +168,9 @@ function BillsPage() {
             <SelectItem value="cancelled">Cancelled</SelectItem>
           </SelectContent>
         </Select>
+        <Button variant="outline" onClick={handleExportPdf}>
+          <FileText className="mr-2 h-4 w-4" /> PDF
+        </Button>
         <Button onClick={() => { setEditing(null); setDialogOpen(true); }}>
           <Plus className="mr-2 h-4 w-4" /> Add bill
         </Button>
