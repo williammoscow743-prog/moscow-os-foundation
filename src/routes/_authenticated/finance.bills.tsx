@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Plus, Search, MoreHorizontal, Copy, Pencil, Trash2, Check, Archive, CalendarPlus } from "lucide-react";
+import { Plus, Search, MoreHorizontal, Copy, Pencil, Trash2, Check, Archive, CalendarPlus, FileText } from "lucide-react";
+import { useFinancePdfExport } from "@/features/finance/use-pdf-export";
 import { toast } from "sonner";
 import { addDays } from "date-fns";
 import { Button } from "@/components/ui/button";
