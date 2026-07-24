@@ -272,12 +272,15 @@ function ReportsPage() {
               </SelectContent>
             </Select>
           </div>
-          <Button onClick={handleExport}>
-            <Download className="mr-2 h-4 w-4" /> Export CSV
+          <Button variant="outline" onClick={handleExport}>
+            <Download className="mr-2 h-4 w-4" /> CSV
+          </Button>
+          <Button onClick={handleExportPdf}>
+            <FileText className="mr-2 h-4 w-4" /> Export PDF
           </Button>
         </div>
         <p className="mt-3 text-xs text-muted-foreground">
-          CSV opens in Excel and Google Sheets. PDF export coming soon.
+          CSV opens in Excel and Google Sheets. PDF includes branded header, totals, and page numbers.
         </p>
       </div>
 
