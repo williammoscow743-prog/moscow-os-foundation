@@ -20,9 +20,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { FileText } from "lucide-react";
 import { StatCard } from "@/components/common/StatCard";
 import { formatCurrency } from "@/utils/format";
 import { useExpenses, useIncome } from "@/features/finance/api";
+import { useFinancePdfExport } from "@/features/finance/use-pdf-export";
 
 type Range = "weekly" | "monthly" | "yearly";
 
