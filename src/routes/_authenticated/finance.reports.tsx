@@ -31,6 +31,7 @@ function ReportsPage() {
   const { data: bills = [] } = useBills();
   const { data: budgets = [] } = useBudgets();
   const saveReport = useSaveFinanceReport();
+  const exportPdf = useFinancePdfExport();
 
   const insights = useMemo(() => {
     const monthStart = startOfMonth(new Date());
