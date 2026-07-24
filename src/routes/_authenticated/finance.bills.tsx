@@ -56,6 +56,7 @@ function BillsPage() {
   const update = useUpdateBill();
   const markPaid = useMarkBillPaid();
   const remove = useDeleteBill();
+  const exportPdf = useFinancePdfExport();
 
   const [q, setQ] = useState("");
   const [status, setStatus] = useState<string>("all");
