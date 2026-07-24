@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Download, Sparkles, TrendingUp, TrendingDown, AlertCircle } from "lucide-react";
+import { Download, FileText, Sparkles, TrendingUp, TrendingDown, AlertCircle } from "lucide-react";
+import { useFinancePdfExport } from "@/features/finance/use-pdf-export";
+import type { PdfColumn } from "@/features/finance/pdf-export";
 import { parseISO, startOfMonth, subMonths } from "date-fns";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
