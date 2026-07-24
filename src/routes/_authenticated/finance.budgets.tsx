@@ -34,6 +34,7 @@ function BudgetsPage() {
   const create = useCreateBudget();
   const update = useUpdateBudget();
   const remove = useDeleteBudget();
+  const exportPdf = useFinancePdfExport();
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<BudgetRow | null>(null);
