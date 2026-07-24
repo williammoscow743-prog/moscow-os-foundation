@@ -87,18 +87,46 @@ function CashFlowPage() {
   const totalIncome = series.reduce((s, r) => s + r.income, 0);
   const totalExpenses = series.reduce((s, r) => s + r.expenses, 0);
 
+  const handleExportPdf = () => {
+    exportPdf({
+      title: "Cash Flow Report",
+      subtitle: `View: ${range}`,
+      periodLabel: `${series[0]?.label ?? ""} – ${latest?.label ?? ""}`,
+      columns: [
+        { header: "Period", key: "label" },
+        { header: "Opening", key: "opening", format: "currency", align: "right" },
+        { header: "Income", key: "income", format: "currency", align: "right" },
+        { header: "Expenses", key: "expenses", format: "currency", align: "right" },
+        { header: "Net", key: "net", format: "currency", align: "right" },
+        { header: "Closing", key: "closing", format: "currency", align: "right" },
+      ],
+      rows: series as unknown as Record<string, unknown>[],
+      totals: [
+        { label: "Total income", value: formatCurrency(totalIncome) },
+        { label: "Total expenses", value: formatCurrency(totalExpenses) },
+        { label: "Closing balance", value: formatCurrency(latest?.closing ?? 0) },
+      ],
+      filename: `cash-flow-${range}-${new Date().toISOString().slice(0, 10)}.pdf`,
+    });
+  };
+
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2">
         <p className="text-sm text-muted-foreground">Running balance from all recorded income and expenses.</p>
-        <Select value={range} onValueChange={(v) => setRange(v as Range)}>
-          <SelectTrigger className="w-32"><SelectValue /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="weekly">Weekly</SelectItem>
-            <SelectItem value="monthly">Monthly</SelectItem>
-            <SelectItem value="yearly">Yearly</SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={handleExportPdf}>
+            <FileText className="mr-2 h-4 w-4" /> PDF
+          </Button>
+          <Select value={range} onValueChange={(v) => setRange(v as Range)}>
+            <SelectTrigger className="w-32"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="weekly">Weekly</SelectItem>
+              <SelectItem value="monthly">Monthly</SelectItem>
+              <SelectItem value="yearly">Yearly</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
