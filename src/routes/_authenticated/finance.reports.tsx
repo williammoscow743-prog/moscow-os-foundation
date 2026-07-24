@@ -120,6 +120,95 @@ function ReportsPage() {
     toast.success("Exported");
   };
 
+  const handleExportPdf = () => {
+    const titles: Record<ReportType, string> = {
+      monthly_summary: "Monthly Summary",
+      expense: "Expense Report",
+      income: "Income Report",
+      cash_flow: "Cash Flow Report",
+      budget: "Budget Report",
+      outstanding_bills: "Outstanding Bills",
+    };
+    let columns: PdfColumn[] = [];
+    let rows: Record<string, unknown>[] = [];
+    let totals: { label: string; value: string }[] = [];
+
+    switch (type) {
+      case "expense":
+        columns = [
+          { header: "Name", key: "name" },
+          { header: "Category", key: "category" },
+          { header: "Vendor", key: "vendor" },
+          { header: "Date", key: "expense_date", format: "date" },
+          { header: "Amount", key: "amount", format: "currency", currencyKey: "currency", align: "right" },
+        ];
+        rows = expenses.map((e) => ({ ...e, category: EXPENSE_CATEGORY_LABELS[e.category] ?? e.category, vendor: e.vendor ?? "—" }));
+        totals = [{ label: "Total", value: formatCurrency(expenses.reduce((s, e) => s + Number(e.amount), 0)) }];
+        break;
+      case "income":
+        columns = [
+          { header: "Source", key: "source" },
+          { header: "Category", key: "category" },
+          { header: "Date", key: "received_date", format: "date" },
+          { header: "Amount", key: "amount", format: "currency", currencyKey: "currency", align: "right" },
+        ];
+        rows = income;
+        totals = [{ label: "Total", value: formatCurrency(income.reduce((s, i) => s + Number(i.amount), 0)) }];
+        break;
+      case "outstanding_bills":
+        columns = [
+          { header: "Name", key: "name" },
+          { header: "Status", key: "status" },
+          { header: "Due", key: "due_date", format: "date" },
+          { header: "Amount", key: "amount", format: "currency", currencyKey: "currency", align: "right" },
+        ];
+        rows = bills.filter((b) => !["paid", "cancelled"].includes(b.status) && !b.archived).map((b) => ({ ...b, status: deriveBillStatus(b) }));
+        totals = [{ label: "Outstanding", value: formatCurrency(rows.reduce((s, r) => s + Number(r.amount as number), 0)) }];
+        break;
+      case "budget":
+        columns = [
+          { header: "Category", key: "category" },
+          { header: "Period", key: "period" },
+          { header: "Amount", key: "amount", format: "currency", currencyKey: "currency", align: "right" },
+        ];
+        rows = budgets.map((b) => ({ ...b, category: EXPENSE_CATEGORY_LABELS[b.category] ?? b.category }));
+        break;
+      case "cash_flow":
+        columns = [
+          { header: "Date", key: "date", format: "date" },
+          { header: "Kind", key: "kind" },
+          { header: "Label", key: "label" },
+          { header: "Amount", key: "amount", format: "currency", currencyKey: "currency", align: "right" },
+        ];
+        rows = [
+          ...income.map((i) => ({ date: i.received_date, kind: "income", label: i.source, amount: i.amount, currency: i.currency })),
+          ...expenses.map((e) => ({ date: e.expense_date, kind: "expense", label: e.name, amount: -Number(e.amount), currency: e.currency })),
+        ].sort((a, b) => (a.date as string).localeCompare(b.date as string));
+        break;
+      case "monthly_summary":
+        columns = [
+          { header: "Metric", key: "metric" },
+          { header: "Value", key: "value", align: "right" },
+        ];
+        rows = [
+          { metric: "Total income (mo)", value: formatCurrency(insights.monthlyIncome) },
+          { metric: "Total expenses (mo)", value: formatCurrency(insights.totalThis) },
+          { metric: "Net (mo)", value: formatCurrency(insights.monthlyIncome - insights.totalThis) },
+          { metric: "vs last month", value: `${insights.change.toFixed(1)}%` },
+        ];
+        break;
+    }
+
+    exportPdf({
+      title: titles[type],
+      periodLabel: `${startOfMonth(new Date()).toISOString().slice(0, 10)} – ${new Date().toISOString().slice(0, 10)}`,
+      columns,
+      rows,
+      totals,
+      filename: `${type}-${new Date().toISOString().slice(0, 10)}.pdf`,
+    });
+  };
+
   return (
     <div className="space-y-6">
       <div className="surface p-5">
