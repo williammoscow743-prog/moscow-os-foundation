@@ -47,6 +47,7 @@ function ExpensesPage() {
   const create = useCreateExpense();
   const update = useUpdateExpense();
   const remove = useDeleteExpense();
+  const exportPdf = useFinancePdfExport();
 
   const [q, setQ] = useState("");
   const [category, setCategory] = useState<string>("all");
