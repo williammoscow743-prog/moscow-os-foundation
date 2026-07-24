@@ -47,6 +47,7 @@ function IncomePage() {
   const create = useCreateIncome();
   const update = useUpdateIncome();
   const remove = useDeleteIncome();
+  const exportPdf = useFinancePdfExport();
 
   const [q, setQ] = useState("");
   const [category, setCategory] = useState("all");
