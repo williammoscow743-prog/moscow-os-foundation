@@ -37,6 +37,7 @@ function CashFlowPage() {
   const [range, setRange] = useState<Range>("monthly");
   const { data: expenses = [] } = useExpenses();
   const { data: income = [] } = useIncome();
+  const exportPdf = useFinancePdfExport();
 
   const series = useMemo(() => {
     const now = new Date();
