@@ -16,11 +16,27 @@ export function formatRelative(input: string | Date | null | undefined) {
   return formatDistanceToNowStrict(d, { addSuffix: true });
 }
 
-export function formatCurrency(value: number, currency = "USD", locale = "en-US") {
-  return new Intl.NumberFormat(locale, { style: "currency", currency }).format(value);
+/**
+ * Formats a monetary value. Defaults to South African Rand, rendered as R1,500.00.
+ * This is the single shared currency formatter for the app.
+ */
+export function formatCurrency(
+  value: number,
+  currency: string = DEFAULT_CURRENCY,
+  locale: string = DEFAULT_LOCALE,
+) {
+  const code = (currency || DEFAULT_CURRENCY).toUpperCase();
+  if (code === "ZAR") {
+    // Intl's en-ZA output uses spaces/commas; the Moscow OS standard is R1,500.00.
+    return `${DEFAULT_CURRENCY_SYMBOL}${new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value)}`;
+  }
+  return new Intl.NumberFormat(locale, { style: "currency", currency: code }).format(value);
 }
 
-export function formatNumber(value: number, locale = "en-US") {
+export function formatNumber(value: number, locale: string = DEFAULT_LOCALE) {
   return new Intl.NumberFormat(locale).format(value);
 }
 
