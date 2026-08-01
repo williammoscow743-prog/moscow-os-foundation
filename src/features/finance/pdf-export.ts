@@ -1,6 +1,7 @@
 import jsPDF from "jspdf";
 import autoTable, { type RowInput } from "jspdf-autotable";
 import { formatCurrency, formatDate } from "@/utils/format";
+import { DEFAULT_CURRENCY_LABEL } from "@/constants/app";
 
 export type PdfColumn = {
   header: string;
@@ -63,6 +64,7 @@ function drawHeader(doc: jsPDF, opts: PdfExportOptions) {
   doc.text(generated, rightX, 20, { align: "right" });
   if (opts.userName) doc.text(`User: ${opts.userName}`, rightX, 25, { align: "right" });
   if (opts.periodLabel) doc.text(`Period: ${opts.periodLabel}`, rightX, 30, { align: "right" });
+  doc.text(`Currency: ${DEFAULT_CURRENCY_LABEL}`, rightX, opts.periodLabel ? 35 : 30, { align: "right" });
 
   if (opts.subtitle) {
     doc.setTextColor(...MUTED);
