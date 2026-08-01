@@ -1,4 +1,9 @@
 import { format, formatDistanceToNowStrict } from "date-fns";
+import {
+  DEFAULT_CURRENCY,
+  DEFAULT_CURRENCY_SYMBOL,
+  DEFAULT_LOCALE,
+} from "@/constants/app";
 
 /** Formatting helpers used across modules. */
 
