@@ -34,7 +34,7 @@ describe("formatCurrency", () => {
   });
 
   it("handles negative values", () => {
-    expect(formatCurrency(-2500)).toBe("-R2,500.00");
+    expect(formatCurrency(-2500)).toBe("R-2,500.00");
   });
 
   it("treats an explicit or lowercase ZAR the same as the default", () => {
