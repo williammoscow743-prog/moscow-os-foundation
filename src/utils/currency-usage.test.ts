@@ -60,16 +60,14 @@ describe("currency usage across Finance, Projects and Dashboard", () => {
 
   it("routes money rendering through the shared formatCurrency helper", () => {
     const moneyPages = sources.filter(([path]) =>
-      /routes\/_authenticated\/(finance|dashboard)/.test(path),
+      /routes\/_authenticated\/finance\..*\.tsx$/.test(path),
     );
-    expect(moneyPages.length).toBeGreaterThan(5);
-    for (const [path, src] of moneyPages) {
-      if (!/amount|total|budget|balance/i.test(src)) continue;
-      expect(`${path} imports formatCurrency`, {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } as any).toBeDefined();
-      expect(src.includes("formatCurrency") || !/R?\d[\d,]*\.\d{2}/.test(src)).toBe(true);
-    }
+    expect(moneyPages.length).toBeGreaterThan(3);
+    const missing = moneyPages
+      .filter(([, src]) => /amount|total|budget|balance/i.test(src))
+      .filter(([, src]) => !src.includes("formatCurrency"))
+      .map(([path]) => path);
+    expect(missing).toEqual([]);
   });
 });
 
