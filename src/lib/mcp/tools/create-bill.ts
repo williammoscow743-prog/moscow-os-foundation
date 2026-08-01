@@ -17,7 +17,7 @@ export default defineTool({
     name: z.string().min(1),
     amount: z.number().nonnegative(),
     due_date: z.string().describe("ISO date."),
-    currency: z.string().default("USD"),
+    currency: z.string().default("ZAR"),
     category: z.string().default("other"),
     frequency: z.enum(["once", "weekly", "monthly", "quarterly", "yearly"]).default("once"),
     vendor: z.string().optional(),

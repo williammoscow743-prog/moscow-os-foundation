@@ -90,7 +90,7 @@ function drawFooter(doc: jsPDF) {
 function formatCell(value: unknown, col: PdfColumn, row: Record<string, unknown>): string {
   if (value == null || value === "") return "—";
   if (col.format === "currency") {
-    const currency = (col.currencyKey ? (row[col.currencyKey] as string) : "USD") || "USD";
+    const currency = (col.currencyKey ? (row[col.currencyKey] as string) : "ZAR") || "ZAR";
     const n = typeof value === "number" ? value : Number(value);
     return Number.isFinite(n) ? formatCurrency(n, currency) : String(value);
   }

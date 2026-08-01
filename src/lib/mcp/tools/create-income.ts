@@ -16,7 +16,7 @@ export default defineTool({
   inputSchema: {
     source: z.string().min(1),
     amount: z.number().nonnegative(),
-    currency: z.string().default("USD"),
+    currency: z.string().default("ZAR"),
     category: z.string().default("other"),
     received_date: z.string().optional(),
     project_id: z.string().uuid().optional(),
