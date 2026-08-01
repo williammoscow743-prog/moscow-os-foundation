@@ -38,7 +38,7 @@ export function BudgetFormDialog({ open, onOpenChange, budget, onSubmit, saving 
   const [form, setForm] = useState({
     category: "other",
     amount: "",
-    currency: "USD",
+    currency: "ZAR",
     period: "monthly" as "weekly" | "monthly" | "quarterly" | "yearly",
     start_date: monthStart,
   });
@@ -54,7 +54,7 @@ export function BudgetFormDialog({ open, onOpenChange, budget, onSubmit, saving 
         start_date: budget.start_date,
       });
     } else {
-      setForm({ category: "other", amount: "", currency: "USD", period: "monthly", start_date: monthStart });
+      setForm({ category: "other", amount: "", currency: "ZAR", period: "monthly", start_date: monthStart });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, budget]);

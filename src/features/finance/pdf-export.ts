@@ -1,6 +1,7 @@
 import jsPDF from "jspdf";
 import autoTable, { type RowInput } from "jspdf-autotable";
 import { formatCurrency, formatDate } from "@/utils/format";
+import { DEFAULT_CURRENCY_LABEL } from "@/constants/app";
 
 export type PdfColumn = {
   header: string;
@@ -63,6 +64,7 @@ function drawHeader(doc: jsPDF, opts: PdfExportOptions) {
   doc.text(generated, rightX, 20, { align: "right" });
   if (opts.userName) doc.text(`User: ${opts.userName}`, rightX, 25, { align: "right" });
   if (opts.periodLabel) doc.text(`Period: ${opts.periodLabel}`, rightX, 30, { align: "right" });
+  doc.text(`Currency: ${DEFAULT_CURRENCY_LABEL}`, rightX, opts.periodLabel ? 35 : 30, { align: "right" });
 
   if (opts.subtitle) {
     doc.setTextColor(...MUTED);
@@ -90,7 +92,7 @@ function drawFooter(doc: jsPDF) {
 function formatCell(value: unknown, col: PdfColumn, row: Record<string, unknown>): string {
   if (value == null || value === "") return "—";
   if (col.format === "currency") {
-    const currency = (col.currencyKey ? (row[col.currencyKey] as string) : "USD") || "USD";
+    const currency = (col.currencyKey ? (row[col.currencyKey] as string) : "ZAR") || "ZAR";
     const n = typeof value === "number" ? value : Number(value);
     return Number.isFinite(n) ? formatCurrency(n, currency) : String(value);
   }

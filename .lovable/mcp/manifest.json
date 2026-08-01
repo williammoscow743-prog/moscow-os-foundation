@@ -513,7 +513,7 @@
             },
             "currency": {
               "type": "string",
-              "default": "USD"
+              "default": "ZAR"
             },
             "category": {
               "type": "string",
@@ -615,7 +615,7 @@
             },
             "currency": {
               "type": "string",
-              "default": "USD"
+              "default": "ZAR"
             },
             "category": {
               "type": "string",
@@ -721,7 +721,7 @@
             },
             "currency": {
               "type": "string",
-              "default": "USD"
+              "default": "ZAR"
             },
             "category": {
               "type": "string",
