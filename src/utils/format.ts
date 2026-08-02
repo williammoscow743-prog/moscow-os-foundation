@@ -30,15 +30,26 @@ export function formatCurrency(
   currency: string = DEFAULT_CURRENCY,
   locale: string = DEFAULT_LOCALE,
 ) {
-  const code = (currency || DEFAULT_CURRENCY).toUpperCase();
+  const raw = (currency || DEFAULT_CURRENCY).trim().toUpperCase();
+  // Stored values may hold a symbol ("R") or an empty/invalid code; treat those as ZAR.
+  const code = raw === "R" || raw.length !== 3 ? DEFAULT_CURRENCY : raw;
+  const amount = Number.isFinite(value) ? value : 0;
   if (code === "ZAR") {
     // Intl's en-ZA output uses spaces/commas; the Moscow OS standard is R1,500.00.
     return `${DEFAULT_CURRENCY_SYMBOL}${new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
-    }).format(value)}`;
+    }).format(amount)}`;
   }
-  return new Intl.NumberFormat(locale, { style: "currency", currency: code }).format(value);
+  try {
+    return new Intl.NumberFormat(locale, { style: "currency", currency: code }).format(amount);
+  } catch {
+    // Unknown currency code — never crash a page over formatting.
+    return `${code} ${new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount)}`;
+  }
 }
 
 export function formatNumber(value: number, locale: string = DEFAULT_LOCALE) {
