@@ -120,7 +120,7 @@ function ReportsPage() {
     toast.success("Exported");
   };
 
-  const handleExportPdf = () => {
+  const buildReport = () => {
     const titles: Record<ReportType, string> = {
       monthly_summary: "Monthly Summary",
       expense: "Expense Report",
