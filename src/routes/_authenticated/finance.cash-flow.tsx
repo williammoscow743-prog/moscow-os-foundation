@@ -21,11 +21,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { FileText } from "lucide-react";
+import { FileText, FileSpreadsheet } from "lucide-react";
 import { StatCard } from "@/components/common/StatCard";
 import { formatCurrency } from "@/utils/format";
 import { useExpenses, useIncome } from "@/features/finance/api";
 import { useFinancePdfExport } from "@/features/finance/use-pdf-export";
+import type { PdfExportOptions } from "@/features/finance/pdf-export";
+import { useFinanceExcelExport } from "@/features/finance/hooks/useFinanceExcelExport";
 
 type Range = "weekly" | "monthly" | "yearly";
 
@@ -38,6 +40,7 @@ function CashFlowPage() {
   const { data: expenses = [] } = useExpenses();
   const { data: income = [] } = useIncome();
   const exportPdf = useFinancePdfExport();
+  const exportExcel = useFinanceExcelExport();
 
   const series = useMemo(() => {
     const now = new Date();
@@ -87,8 +90,7 @@ function CashFlowPage() {
   const totalIncome = series.reduce((s, r) => s + r.income, 0);
   const totalExpenses = series.reduce((s, r) => s + r.expenses, 0);
 
-  const handleExportPdf = () => {
-    exportPdf({
+  const buildReport = (): Omit<PdfExportOptions, "userName" | "filename"> => ({
       title: "Cash Flow Report",
       subtitle: `View: ${range}`,
       periodLabel: `${series[0]?.label ?? ""} – ${latest?.label ?? ""}`,
@@ -106,16 +108,20 @@ function CashFlowPage() {
         { label: "Total expenses", value: formatCurrency(totalExpenses) },
         { label: "Closing balance", value: formatCurrency(latest?.closing ?? 0) },
       ],
-      filename: `cash-flow-${range}-${new Date().toISOString().slice(0, 10)}.pdf`,
     });
-  };
+
+  const handleExportPdf = () => exportPdf({ ...buildReport(), filename: `cash-flow-${range}-${new Date().toISOString().slice(0, 10)}.pdf` });
+  const handleExportExcel = () => { void exportExcel({ ...buildReport(), filename: `cash-flow-${range}-${new Date().toISOString().slice(0, 10)}.xlsx` }); };
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-2">
         <p className="text-sm text-muted-foreground">Running balance from all recorded income and expenses.</p>
         <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={handleExportPdf}>
+          <Button variant="outline" onClick={handleExportExcel}>
+          <FileSpreadsheet className="mr-2 h-4 w-4" /> Excel
+        </Button>
+        <Button variant="outline" onClick={handleExportPdf}>
             <FileText className="mr-2 h-4 w-4" /> PDF
           </Button>
           <Select value={range} onValueChange={(v) => setRange(v as Range)}>

@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Download, FileText, Sparkles, TrendingUp, TrendingDown, AlertCircle } from "lucide-react";
+import { Download, FileText, FileSpreadsheet, Sparkles, TrendingUp, TrendingDown, AlertCircle } from "lucide-react";
 import { useFinancePdfExport } from "@/features/finance/use-pdf-export";
+import { useFinanceExcelExport } from "@/features/finance/hooks/useFinanceExcelExport";
 import type { PdfColumn } from "@/features/finance/pdf-export";
 import { parseISO, startOfMonth, subMonths } from "date-fns";
 import { toast } from "sonner";
@@ -32,6 +33,7 @@ function ReportsPage() {
   const { data: budgets = [] } = useBudgets();
   const saveReport = useSaveFinanceReport();
   const exportPdf = useFinancePdfExport();
+  const exportExcel = useFinanceExcelExport();
 
   const insights = useMemo(() => {
     const monthStart = startOfMonth(new Date());
@@ -120,7 +122,7 @@ function ReportsPage() {
     toast.success("Exported");
   };
 
-  const handleExportPdf = () => {
+  const buildReport = () => {
     const titles: Record<ReportType, string> = {
       monthly_summary: "Monthly Summary",
       expense: "Expense Report",
@@ -199,14 +201,19 @@ function ReportsPage() {
         break;
     }
 
-    exportPdf({
+    return {
       title: titles[type],
       periodLabel: `${startOfMonth(new Date()).toISOString().slice(0, 10)} – ${new Date().toISOString().slice(0, 10)}`,
       columns,
       rows,
       totals,
-      filename: `${type}-${new Date().toISOString().slice(0, 10)}.pdf`,
-    });
+    };
+  };
+
+  const stamp = () => new Date().toISOString().slice(0, 10);
+  const handleExportPdf = () => exportPdf({ ...buildReport(), filename: `${type}-${stamp()}.pdf` });
+  const handleExportExcel = () => {
+    void exportExcel({ ...buildReport(), filename: `${type}-${stamp()}.xlsx` });
   };
 
   return (
@@ -275,12 +282,15 @@ function ReportsPage() {
           <Button variant="outline" onClick={handleExport}>
             <Download className="mr-2 h-4 w-4" /> CSV
           </Button>
+          <Button variant="outline" onClick={handleExportExcel}>
+            <FileSpreadsheet className="mr-2 h-4 w-4" /> Export Excel
+          </Button>
           <Button onClick={handleExportPdf}>
             <FileText className="mr-2 h-4 w-4" /> Export PDF
           </Button>
         </div>
         <p className="mt-3 text-xs text-muted-foreground">
-          CSV opens in Excel and Google Sheets. PDF includes branded header, totals, and page numbers.
+          CSV opens in Excel and Google Sheets. Excel and PDF include branded headers, totals, and formatted currency.
         </p>
       </div>
 

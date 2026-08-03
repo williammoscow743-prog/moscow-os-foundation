@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Plus, Search, Download, FileText, MoreHorizontal, Copy, Pencil, Trash2 } from "lucide-react";
+import { Plus, Search, Download, FileText, MoreHorizontal, Copy, Pencil, Trash2, FileSpreadsheet } from "lucide-react";
 import { useFinancePdfExport } from "@/features/finance/use-pdf-export";
+import type { PdfExportOptions } from "@/features/finance/pdf-export";
+import { useFinanceExcelExport } from "@/features/finance/hooks/useFinanceExcelExport";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -48,6 +50,7 @@ function ExpensesPage() {
   const update = useUpdateExpense();
   const remove = useDeleteExpense();
   const exportPdf = useFinancePdfExport();
+  const exportExcel = useFinanceExcelExport();
 
   const [q, setQ] = useState("");
   const [category, setCategory] = useState<string>("all");
@@ -128,8 +131,7 @@ function ExpensesPage() {
     downloadCsv(`expenses-${new Date().toISOString().slice(0, 10)}.csv`, toCsv(rows));
   };
 
-  const handleExportPdf = () => {
-    exportPdf({
+  const buildReport = (): Omit<PdfExportOptions, "userName" | "filename"> => ({
       title: "Expense Report",
       subtitle: category === "all" ? "All categories" : `Category: ${EXPENSE_CATEGORY_LABELS[category] ?? category}`,
       periodLabel: "All time",
@@ -149,9 +151,10 @@ function ExpensesPage() {
         { label: "Entries", value: String(filtered.length) },
         { label: "Total", value: formatCurrency(total) },
       ],
-      filename: `expenses-${new Date().toISOString().slice(0, 10)}.pdf`,
     });
-  };
+
+  const handleExportPdf = () => exportPdf({ ...buildReport(), filename: `expenses-${new Date().toISOString().slice(0, 10)}.pdf` });
+  const handleExportExcel = () => { void exportExcel({ ...buildReport(), filename: `expenses-${new Date().toISOString().slice(0, 10)}.xlsx` }); };
 
   return (
     <div className="space-y-4">
@@ -178,6 +181,9 @@ function ExpensesPage() {
         </Select>
         <Button variant="outline" onClick={handleExport}>
           <Download className="mr-2 h-4 w-4" /> CSV
+        </Button>
+        <Button variant="outline" onClick={handleExportExcel}>
+          <FileSpreadsheet className="mr-2 h-4 w-4" /> Excel
         </Button>
         <Button variant="outline" onClick={handleExportPdf}>
           <FileText className="mr-2 h-4 w-4" /> PDF

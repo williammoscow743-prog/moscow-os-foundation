@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Plus, MoreHorizontal, Pencil, Trash2, AlertTriangle, FileText } from "lucide-react";
+import { Plus, MoreHorizontal, Pencil, Trash2, AlertTriangle, FileText, FileSpreadsheet } from "lucide-react";
 import { useFinancePdfExport } from "@/features/finance/use-pdf-export";
+import type { PdfExportOptions } from "@/features/finance/pdf-export";
+import { useFinanceExcelExport } from "@/features/finance/hooks/useFinanceExcelExport";
 import { toast } from "sonner";
 import { parseISO, startOfMonth } from "date-fns";
 import { Button } from "@/components/ui/button";
@@ -35,6 +37,7 @@ function BudgetsPage() {
   const update = useUpdateBudget();
   const remove = useDeleteBudget();
   const exportPdf = useFinancePdfExport();
+  const exportExcel = useFinanceExcelExport();
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<BudgetRow | null>(null);
@@ -66,8 +69,7 @@ function BudgetsPage() {
     }
   };
 
-  const handleExportPdf = () => {
-    exportPdf({
+  const buildReport = (): Omit<PdfExportOptions, "userName" | "filename"> => ({
       title: "Budget Report",
       periodLabel: "Current period",
       columns: [
@@ -88,13 +90,17 @@ function BudgetsPage() {
         { label: "Total budgeted", value: formatCurrency(withUsage.reduce((s, b) => s + Number(b.amount), 0)) },
         { label: "Total spent", value: formatCurrency(withUsage.reduce((s, b) => s + b.spent, 0)) },
       ],
-      filename: `budgets-${new Date().toISOString().slice(0, 10)}.pdf`,
     });
-  };
+
+  const handleExportPdf = () => exportPdf({ ...buildReport(), filename: `budgets-${new Date().toISOString().slice(0, 10)}.pdf` });
+  const handleExportExcel = () => { void exportExcel({ ...buildReport(), filename: `budgets-${new Date().toISOString().slice(0, 10)}.xlsx` }); };
 
   return (
     <div className="space-y-4">
       <div className="flex justify-end gap-2">
+        <Button variant="outline" onClick={handleExportExcel}>
+          <FileSpreadsheet className="mr-2 h-4 w-4" /> Excel
+        </Button>
         <Button variant="outline" onClick={handleExportPdf}>
           <FileText className="mr-2 h-4 w-4" /> PDF
         </Button>
