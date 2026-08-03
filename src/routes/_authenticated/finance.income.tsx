@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Plus, Search, MoreHorizontal, Pencil, Trash2, Download, FileText } from "lucide-react";
+import { Plus, Search, MoreHorizontal, Pencil, Trash2, Download, FileText, FileSpreadsheet } from "lucide-react";
 import { useFinancePdfExport } from "@/features/finance/use-pdf-export";
+import { useFinanceExcelExport } from "@/features/finance/hooks/useFinanceExcelExport";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -48,6 +49,7 @@ function IncomePage() {
   const update = useUpdateIncome();
   const remove = useDeleteIncome();
   const exportPdf = useFinancePdfExport();
+  const exportExcel = useFinanceExcelExport();
 
   const [q, setQ] = useState("");
   const [category, setCategory] = useState("all");
@@ -94,8 +96,7 @@ function IncomePage() {
     downloadCsv(`income-${new Date().toISOString().slice(0, 10)}.csv`, toCsv(rows));
   };
 
-  const handleExportPdf = () => {
-    exportPdf({
+  const buildReport = () => ({
       title: "Income Report",
       subtitle: category === "all" ? "All categories" : `Category: ${INCOME_CATEGORY_LABELS[category] ?? category}`,
       periodLabel: "All time",
@@ -113,9 +114,10 @@ function IncomePage() {
         { label: "Entries", value: String(filtered.length) },
         { label: "Total income", value: formatCurrency(total) },
       ],
-      filename: `income-${new Date().toISOString().slice(0, 10)}.pdf`,
     });
-  };
+
+  const handleExportPdf = () => exportPdf({ ...buildReport(), filename: `income-${new Date().toISOString().slice(0, 10)}.pdf` });
+  const handleExportExcel = () => { void exportExcel({ ...buildReport(), filename: `income-${new Date().toISOString().slice(0, 10)}.xlsx` }); };
 
   return (
     <div className="space-y-4">
@@ -135,6 +137,9 @@ function IncomePage() {
         </Select>
         <Button variant="outline" onClick={handleExport}>
           <Download className="mr-2 h-4 w-4" /> CSV
+        </Button>
+        <Button variant="outline" onClick={handleExportExcel}>
+          <FileSpreadsheet className="mr-2 h-4 w-4" /> Excel
         </Button>
         <Button variant="outline" onClick={handleExportPdf}>
           <FileText className="mr-2 h-4 w-4" /> PDF
