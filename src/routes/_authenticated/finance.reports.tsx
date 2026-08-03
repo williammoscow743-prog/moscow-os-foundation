@@ -199,14 +199,19 @@ function ReportsPage() {
         break;
     }
 
-    exportPdf({
+    return {
       title: titles[type],
       periodLabel: `${startOfMonth(new Date()).toISOString().slice(0, 10)} – ${new Date().toISOString().slice(0, 10)}`,
       columns,
       rows,
       totals,
-      filename: `${type}-${new Date().toISOString().slice(0, 10)}.pdf`,
-    });
+    };
+  };
+
+  const stamp = () => new Date().toISOString().slice(0, 10);
+  const handleExportPdf = () => exportPdf({ ...buildReport(), filename: `${type}-${stamp()}.pdf` });
+  const handleExportExcel = () => {
+    void exportExcel({ ...buildReport(), filename: `${type}-${stamp()}.xlsx` });
   };
 
   return (
