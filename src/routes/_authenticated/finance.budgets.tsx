@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Plus, MoreHorizontal, Pencil, Trash2, AlertTriangle, FileText, FileSpreadsheet } from "lucide-react";
 import { useFinancePdfExport } from "@/features/finance/use-pdf-export";
+import type { PdfExportOptions } from "@/features/finance/pdf-export";
 import { useFinanceExcelExport } from "@/features/finance/hooks/useFinanceExcelExport";
 import { toast } from "sonner";
 import { parseISO, startOfMonth } from "date-fns";
@@ -68,7 +69,7 @@ function BudgetsPage() {
     }
   };
 
-  const buildReport = () => ({
+  const buildReport = (): Omit<PdfExportOptions, "userName" | "filename"> => ({
       title: "Budget Report",
       periodLabel: "Current period",
       columns: [

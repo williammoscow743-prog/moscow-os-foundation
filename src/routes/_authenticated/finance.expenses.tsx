@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Plus, Search, Download, FileText, MoreHorizontal, Copy, Pencil, Trash2, FileSpreadsheet } from "lucide-react";
 import { useFinancePdfExport } from "@/features/finance/use-pdf-export";
+import type { PdfExportOptions } from "@/features/finance/pdf-export";
 import { useFinanceExcelExport } from "@/features/finance/hooks/useFinanceExcelExport";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -130,7 +131,7 @@ function ExpensesPage() {
     downloadCsv(`expenses-${new Date().toISOString().slice(0, 10)}.csv`, toCsv(rows));
   };
 
-  const buildReport = () => ({
+  const buildReport = (): Omit<PdfExportOptions, "userName" | "filename"> => ({
       title: "Expense Report",
       subtitle: category === "all" ? "All categories" : `Category: ${EXPENSE_CATEGORY_LABELS[category] ?? category}`,
       periodLabel: "All time",

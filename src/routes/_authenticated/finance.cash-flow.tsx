@@ -26,6 +26,7 @@ import { StatCard } from "@/components/common/StatCard";
 import { formatCurrency } from "@/utils/format";
 import { useExpenses, useIncome } from "@/features/finance/api";
 import { useFinancePdfExport } from "@/features/finance/use-pdf-export";
+import type { PdfExportOptions } from "@/features/finance/pdf-export";
 import { useFinanceExcelExport } from "@/features/finance/hooks/useFinanceExcelExport";
 
 type Range = "weekly" | "monthly" | "yearly";
@@ -89,7 +90,7 @@ function CashFlowPage() {
   const totalIncome = series.reduce((s, r) => s + r.income, 0);
   const totalExpenses = series.reduce((s, r) => s + r.expenses, 0);
 
-  const buildReport = () => ({
+  const buildReport = (): Omit<PdfExportOptions, "userName" | "filename"> => ({
       title: "Cash Flow Report",
       subtitle: `View: ${range}`,
       periodLabel: `${series[0]?.label ?? ""} – ${latest?.label ?? ""}`,
