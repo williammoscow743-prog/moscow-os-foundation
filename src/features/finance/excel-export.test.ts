@@ -52,8 +52,11 @@ describe("finance excel export", () => {
 
   it("formats amounts as ZAR numbers, freezes the header and sets an auto filter", async () => {
     const sheet = await generate();
-    const headerRow = sheet.autoFilter as { from: { row: number } };
-    const rowIndex = headerRow.from.row + 1;
+    let headerRowIndex = 0;
+    sheet.eachRow((row, idx) => {
+      if (row.getCell(1).value === "Name") headerRowIndex = idx;
+    });
+    const rowIndex = headerRowIndex + 1;
     const amountCell = sheet.getCell(rowIndex, 3);
     expect(amountCell.value).toBe(1500);
     expect(amountCell.numFmt).toContain('"R"#,##0.00');
