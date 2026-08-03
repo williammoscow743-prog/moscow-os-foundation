@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import ExcelJS from "exceljs";
 import { exportFinanceExcel } from "./services/excel-export.service";
