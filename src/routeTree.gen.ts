@@ -34,6 +34,7 @@ import { Route as AuthenticatedFinanceCategoriesRouteImport } from './routes/_au
 import { Route as AuthenticatedFinanceCashFlowRouteImport } from './routes/_authenticated/finance.cash-flow'
 import { Route as AuthenticatedFinanceBudgetsRouteImport } from './routes/_authenticated/finance.budgets'
 import { Route as AuthenticatedFinanceBillsRouteImport } from './routes/_authenticated/finance.bills'
+import { Route as AuthenticatedClientsClientIdRouteImport } from './routes/_authenticated/clients.$clientId'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 
@@ -173,6 +174,12 @@ const AuthenticatedFinanceBillsRoute =
     path: '/bills',
     getParentRoute: () => AuthenticatedFinanceRoute,
   } as any)
+const AuthenticatedClientsClientIdRoute =
+  AuthenticatedClientsClientIdRouteImport.update({
+    id: '/$clientId',
+    path: '/$clientId',
+    getParentRoute: () => AuthenticatedClientsRoute,
+  } as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
   Char91DotmcpChar93InvokeToolToolRouteImport.update({
     id: '/.mcp/invoke-tool/$tool',
@@ -202,6 +209,7 @@ export interface FileRoutesByFullPath {
   '/tasks': typeof AuthenticatedTasksRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/clients/$clientId': typeof AuthenticatedClientsClientIdRoute
   '/finance/bills': typeof AuthenticatedFinanceBillsRoute
   '/finance/budgets': typeof AuthenticatedFinanceBudgetsRoute
   '/finance/cash-flow': typeof AuthenticatedFinanceCashFlowRoute
@@ -228,6 +236,7 @@ export interface FileRoutesByTo {
   '/tasks': typeof AuthenticatedTasksRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/clients/$clientId': typeof AuthenticatedClientsClientIdRoute
   '/finance/bills': typeof AuthenticatedFinanceBillsRoute
   '/finance/budgets': typeof AuthenticatedFinanceBudgetsRoute
   '/finance/cash-flow': typeof AuthenticatedFinanceCashFlowRoute
@@ -258,6 +267,7 @@ export interface FileRoutesById {
   '/_authenticated/tasks': typeof AuthenticatedTasksRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/_authenticated/clients/$clientId': typeof AuthenticatedClientsClientIdRoute
   '/_authenticated/finance/bills': typeof AuthenticatedFinanceBillsRoute
   '/_authenticated/finance/budgets': typeof AuthenticatedFinanceBudgetsRoute
   '/_authenticated/finance/cash-flow': typeof AuthenticatedFinanceCashFlowRoute
@@ -288,6 +298,7 @@ export interface FileRouteTypes {
     | '/tasks'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/clients/$clientId'
     | '/finance/bills'
     | '/finance/budgets'
     | '/finance/cash-flow'
@@ -314,6 +325,7 @@ export interface FileRouteTypes {
     | '/tasks'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/clients/$clientId'
     | '/finance/bills'
     | '/finance/budgets'
     | '/finance/cash-flow'
@@ -343,6 +355,7 @@ export interface FileRouteTypes {
     | '/_authenticated/tasks'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/_authenticated/clients/$clientId'
     | '/_authenticated/finance/bills'
     | '/_authenticated/finance/budgets'
     | '/_authenticated/finance/cash-flow'
@@ -544,6 +557,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedFinanceBillsRouteImport
       parentRoute: typeof AuthenticatedFinanceRoute
     }
+    '/_authenticated/clients/$clientId': {
+      id: '/_authenticated/clients/$clientId'
+      path: '/$clientId'
+      fullPath: '/clients/$clientId'
+      preLoaderRoute: typeof AuthenticatedClientsClientIdRouteImport
+      parentRoute: typeof AuthenticatedClientsRoute
+    }
     '/.mcp/invoke-tool/$tool': {
       id: '/.mcp/invoke-tool/$tool'
       path: '/.mcp/invoke-tool/$tool'
@@ -562,10 +582,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedClientsRouteChildren {
+  AuthenticatedClientsClientIdRoute: typeof AuthenticatedClientsClientIdRoute
   AuthenticatedClientsIndexRoute: typeof AuthenticatedClientsIndexRoute
 }
 
 const AuthenticatedClientsRouteChildren: AuthenticatedClientsRouteChildren = {
+  AuthenticatedClientsClientIdRoute: AuthenticatedClientsClientIdRoute,
   AuthenticatedClientsIndexRoute: AuthenticatedClientsIndexRoute,
 }
 
