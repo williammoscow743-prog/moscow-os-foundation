@@ -15,7 +15,7 @@ function AuthenticatedLayout() {
 
   useEffect(() => {
     if (!loading && !session) {
-      navigate({ to: "/auth", replace: true });
+      navigate({ to: "/auth", replace: true, search: { next: undefined } });
     }
   }, [loading, session, navigate]);
 

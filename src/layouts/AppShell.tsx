@@ -183,7 +183,7 @@ function TopNav() {
   const handleSignOut = async () => {
     await signOut();
     toast.success("Signed out");
-    navigate({ to: "/auth" });
+    navigate({ to: "/auth", search: { next: undefined } });
   };
 
   const initials =
