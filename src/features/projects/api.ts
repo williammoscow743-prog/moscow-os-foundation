@@ -21,6 +21,23 @@ export function useProjects() {
   });
 }
 
+export function useProjectsByClient(clientId: string | undefined) {
+  const { user } = useAuth();
+  return useQuery({
+    queryKey: [...KEY, "by-client", clientId],
+    enabled: !!user && !!clientId,
+    queryFn: async (): Promise<ProjectRow[]> => {
+      const { data, error } = await supabase
+        .from("projects")
+        .select("*")
+        .eq("client_id", clientId!)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as ProjectRow[];
+    },
+  });
+}
+
 export function useCreateProject() {
   const qc = useQueryClient();
   const { user } = useAuth();
