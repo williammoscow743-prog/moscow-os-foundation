@@ -34,6 +34,7 @@ import {
   ClientFormDialog,
   type ClientFormSubmit,
 } from "@/features/clients/ClientFormDialog";
+import { ClientProjectsSection } from "@/features/projects/ClientProjectsSection";
 import type { ClientStatus, ClientType } from "@/features/clients/types";
 import {
   CLIENT_STATUS_LABELS,
@@ -270,6 +271,8 @@ function ClientProfilePage() {
           </div>
         </section>
       </div>
+
+      <ClientProjectsSection clientId={client.id} />
 
       <ClientFormDialog
         open={formOpen}

@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
+import { ClientSelect } from "@/features/clients/ClientSelect";
 import { cn } from "@/lib/utils";
 import {
   PROJECT_CATEGORIES,
@@ -38,6 +39,7 @@ type FormState = {
   start_date: string;
   due_date: string;
   color: string;
+  client_id: string | null;
 };
 
 const empty: FormState = {
@@ -50,6 +52,7 @@ const empty: FormState = {
   start_date: "",
   due_date: "",
   color: PROJECT_COLORS[5],
+  client_id: null,
 };
 
 export type ProjectFormSubmit = {
@@ -62,6 +65,7 @@ export type ProjectFormSubmit = {
   start_date: string | null;
   due_date: string | null;
   color: string | null;
+  client_id: string | null;
 };
 
 type Props = {
@@ -89,6 +93,7 @@ export function ProjectFormDialog({ open, onOpenChange, project, onSubmit, savin
               start_date: project.start_date ?? "",
               due_date: project.due_date ?? "",
               color: project.color ?? PROJECT_COLORS[5],
+              client_id: project.client_id ?? null,
             }
           : empty,
       );
@@ -108,6 +113,7 @@ export function ProjectFormDialog({ open, onOpenChange, project, onSubmit, savin
       start_date: form.start_date || null,
       due_date: form.due_date || null,
       color: form.color || null,
+      client_id: form.client_id,
     });
   };
 
@@ -145,6 +151,17 @@ export function ProjectFormDialog({ open, onOpenChange, project, onSubmit, savin
               placeholder="What's this project about?"
               rows={3}
             />
+          </div>
+
+          <div className="space-y-2">
+            <Label>Client</Label>
+            <ClientSelect
+              value={form.client_id}
+              onChange={(v) => setForm((f) => ({ ...f, client_id: v }))}
+            />
+            <p className="text-xs text-muted-foreground">
+              Optional — link this project to an existing client.
+            </p>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
