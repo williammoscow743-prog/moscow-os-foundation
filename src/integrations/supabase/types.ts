@@ -534,8 +534,12 @@ export type Database = {
       }
       notifications: {
         Row: {
+          category: string
           created_at: string
+          dedupe_key: string | null
+          entity_id: string | null
           id: string
+          link: string | null
           message: string | null
           read: boolean
           title: string
@@ -543,8 +547,12 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          category?: string
           created_at?: string
+          dedupe_key?: string | null
+          entity_id?: string | null
           id?: string
+          link?: string | null
           message?: string | null
           read?: boolean
           title: string
@@ -552,8 +560,12 @@ export type Database = {
           user_id: string
         }
         Update: {
+          category?: string
           created_at?: string
+          dedupe_key?: string | null
+          entity_id?: string | null
           id?: string
+          link?: string | null
           message?: string | null
           read?: boolean
           title?: string
