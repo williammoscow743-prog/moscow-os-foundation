@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { AppShell } from "@/layouts/AppShell";
 import { Loader2 } from "lucide-react";
+import { useFinanceNotifications } from "@/features/finance/hooks/useFinanceNotifications";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -29,7 +30,14 @@ function AuthenticatedLayout() {
 
   return (
     <AppShell>
+      <FinanceNotificationRunner />
       <Outlet />
     </AppShell>
   );
+}
+
+/** Evaluates Finance notification rules once per authenticated session mount. */
+function FinanceNotificationRunner() {
+  useFinanceNotifications();
+  return null;
 }

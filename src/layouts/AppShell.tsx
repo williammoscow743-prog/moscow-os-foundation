@@ -13,7 +13,6 @@ import {
   Moon,
   Monitor,
   Search,
-  Bell,
   LogOut,
   ChevronsLeft,
   ChevronsRight,
@@ -36,6 +35,7 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { toast } from "sonner";
+import { NotificationBell } from "@/features/notifications/NotificationBell";
 
 type NavItem = {
   label: string;
@@ -247,9 +247,7 @@ function TopNav() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <Button variant="ghost" size="icon" aria-label="Notifications">
-          <Bell className="h-4 w-4" />
-        </Button>
+        <NotificationBell />
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
