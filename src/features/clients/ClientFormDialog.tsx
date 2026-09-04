@@ -150,7 +150,7 @@ export function ClientFormDialog({ open, onOpenChange, client, onSubmit, saving 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
+      <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>{client ? "Edit client" : "New client"}</DialogTitle>
           <DialogDescription>
@@ -160,7 +160,8 @@ export function ClientFormDialog({ open, onOpenChange, client, onSubmit, saving 
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={submit} className="space-y-5" noValidate>
+        <form onSubmit={submit} className="flex min-h-0 flex-1 flex-col" noValidate>
+          <div className="-mx-6 min-h-0 flex-1 space-y-5 overflow-y-auto px-6">
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="first_name">First name *</Label>
@@ -318,8 +319,9 @@ export function ClientFormDialog({ open, onOpenChange, client, onSubmit, saving 
               placeholder="Anything useful to remember about this client…"
             />
           </div>
+          </div>
 
-          <DialogFooter>
+          <DialogFooter className="-mx-6 -mb-6 mt-4 border-t bg-background px-6 py-4">
             <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
