@@ -129,7 +129,8 @@ export function ProjectFormDialog({ open, onOpenChange, project, onSubmit, savin
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={submit} className="space-y-4">
+        <form onSubmit={submit} className="flex min-h-0 flex-1 flex-col">
+          <div className="-mx-6 min-h-0 flex-1 space-y-4 overflow-y-auto px-6">
           <div className="space-y-2">
             <Label htmlFor="name">Name</Label>
             <Input
@@ -275,8 +276,9 @@ export function ProjectFormDialog({ open, onOpenChange, project, onSubmit, savin
               step={5}
             />
           </div>
+          </div>
 
-          <DialogFooter>
+          <DialogFooter className="-mx-6 -mb-6 mt-4 border-t bg-background px-6 py-4">
             <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>

@@ -110,7 +110,7 @@ export function BillFormDialog({ open, onOpenChange, bill, onSubmit, saving }: P
           <DialogDescription>Recurring or one-off bill to track.</DialogDescription>
         </DialogHeader>
 
-        <div className="grid gap-4 py-2">
+        <div className="-mx-6 grid min-h-0 flex-1 gap-4 overflow-y-auto px-6 py-2">
           <div className="grid gap-2">
             <Label>Name</Label>
             <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
@@ -174,7 +174,7 @@ export function BillFormDialog({ open, onOpenChange, bill, onSubmit, saving }: P
           </div>
         </div>
 
-        <DialogFooter>
+        <DialogFooter className="-mx-6 -mb-6 mt-auto border-t bg-background px-6 py-4">
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
           <Button onClick={handleSave} disabled={saving || !form.name.trim()}>
             {saving ? "Saving…" : bill ? "Save changes" : "Add bill"}
