@@ -101,7 +101,7 @@ export function IncomeFormDialog({ open, onOpenChange, income, onSubmit, saving 
           <DialogDescription>Record money received.</DialogDescription>
         </DialogHeader>
 
-        <div className="grid gap-4 py-2">
+        <div className="-mx-6 grid min-h-0 flex-1 gap-4 overflow-y-auto px-6 py-2">
           <div className="grid gap-2">
             <Label>Source</Label>
             <Input value={form.source} onChange={(e) => setForm({ ...form, source: e.target.value })} placeholder="Client, employer…" />
@@ -160,7 +160,7 @@ export function IncomeFormDialog({ open, onOpenChange, income, onSubmit, saving 
           </div>
         </div>
 
-        <DialogFooter>
+        <DialogFooter className="-mx-6 -mb-6 mt-auto border-t bg-background px-6 py-4">
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
           <Button onClick={handleSave} disabled={saving || !form.source.trim()}>
             {saving ? "Saving…" : income ? "Save changes" : "Add income"}

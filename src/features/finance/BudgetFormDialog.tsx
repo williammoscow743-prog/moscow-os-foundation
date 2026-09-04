@@ -77,7 +77,7 @@ export function BudgetFormDialog({ open, onOpenChange, budget, onSubmit, saving 
           <DialogDescription>Cap spending for a category.</DialogDescription>
         </DialogHeader>
 
-        <div className="grid gap-4 py-2">
+        <div className="-mx-6 grid min-h-0 flex-1 gap-4 overflow-y-auto px-6 py-2">
           <div className="grid gap-2">
             <Label>Category</Label>
             <Select value={form.category} onValueChange={(v) => setForm({ ...form, category: v })}>
@@ -121,7 +121,7 @@ export function BudgetFormDialog({ open, onOpenChange, budget, onSubmit, saving 
           </div>
         </div>
 
-        <DialogFooter>
+        <DialogFooter className="-mx-6 -mb-6 mt-auto border-t bg-background px-6 py-4">
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
           <Button onClick={handleSave} disabled={saving || !form.amount}>
             {saving ? "Saving…" : budget ? "Save changes" : "Add budget"}
