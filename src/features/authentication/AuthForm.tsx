@@ -122,7 +122,7 @@ export function AuthForm() {
       {mode === "signin" && (
         <form onSubmit={onSignIn} className="space-y-4">
           <Field label="Email" error={signInForm.formState.errors.email?.message}>
-            <Input type="email" autoComplete="email" {...signInForm.register("email")} />
+            <Input {...emailInputProps} autoComplete="email" {...signInForm.register("email")} />
           </Field>
           <Field label="Password" error={signInForm.formState.errors.password?.message}>
             <Input
@@ -170,7 +170,7 @@ export function AuthForm() {
             <Input autoComplete="name" {...signUpForm.register("full_name")} />
           </Field>
           <Field label="Email" error={signUpForm.formState.errors.email?.message}>
-            <Input type="email" autoComplete="email" {...signUpForm.register("email")} />
+            <Input {...emailInputProps} autoComplete="email" {...signUpForm.register("email")} />
           </Field>
           <Field label="Password" error={signUpForm.formState.errors.password?.message}>
             <Input
@@ -199,7 +199,7 @@ export function AuthForm() {
       {mode === "forgot" && (
         <form onSubmit={onForgot} className="space-y-4">
           <Field label="Email" error={forgotForm.formState.errors.email?.message}>
-            <Input type="email" autoComplete="email" {...forgotForm.register("email")} />
+            <Input {...emailInputProps} autoComplete="email" {...forgotForm.register("email")} />
           </Field>
           <Button type="submit" className="w-full" disabled={submitting}>
             {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
