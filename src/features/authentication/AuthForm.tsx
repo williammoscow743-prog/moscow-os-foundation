@@ -14,17 +14,32 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 type Mode = "signin" | "signup" | "forgot";
 
+// Mobile keyboards auto-capitalize and often append a trailing space, which
+// makes valid credentials fail. Normalize before validation and submission.
+const emailField = z
+  .string()
+  .transform((v) => v.trim().toLowerCase())
+  .pipe(z.string().email("Enter a valid email"));
+
 const signInSchema = z.object({
-  email: z.string().email("Enter a valid email"),
+  email: emailField,
   password: z.string().min(6, "At least 6 characters"),
   remember: z.boolean().optional(),
 });
 const signUpSchema = z.object({
   full_name: z.string().min(2, "Enter your name"),
-  email: z.string().email("Enter a valid email"),
+  email: emailField,
   password: z.string().min(8, "At least 8 characters"),
 });
-const forgotSchema = z.object({ email: z.string().email("Enter a valid email") });
+const forgotSchema = z.object({ email: emailField });
+
+const emailInputProps = {
+  type: "email",
+  inputMode: "email" as const,
+  autoCapitalize: "none",
+  autoCorrect: "off",
+  spellCheck: false,
+};
 
 export function AuthForm() {
   const [mode, setMode] = useState<Mode>("signin");
@@ -107,7 +122,7 @@ export function AuthForm() {
       {mode === "signin" && (
         <form onSubmit={onSignIn} className="space-y-4">
           <Field label="Email" error={signInForm.formState.errors.email?.message}>
-            <Input type="email" autoComplete="email" {...signInForm.register("email")} />
+            <Input {...emailInputProps} autoComplete="email" {...signInForm.register("email")} />
           </Field>
           <Field label="Password" error={signInForm.formState.errors.password?.message}>
             <Input
@@ -155,7 +170,7 @@ export function AuthForm() {
             <Input autoComplete="name" {...signUpForm.register("full_name")} />
           </Field>
           <Field label="Email" error={signUpForm.formState.errors.email?.message}>
-            <Input type="email" autoComplete="email" {...signUpForm.register("email")} />
+            <Input {...emailInputProps} autoComplete="email" {...signUpForm.register("email")} />
           </Field>
           <Field label="Password" error={signUpForm.formState.errors.password?.message}>
             <Input
@@ -184,7 +199,7 @@ export function AuthForm() {
       {mode === "forgot" && (
         <form onSubmit={onForgot} className="space-y-4">
           <Field label="Email" error={forgotForm.formState.errors.email?.message}>
-            <Input type="email" autoComplete="email" {...forgotForm.register("email")} />
+            <Input {...emailInputProps} autoComplete="email" {...forgotForm.register("email")} />
           </Field>
           <Button type="submit" className="w-full" disabled={submitting}>
             {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
