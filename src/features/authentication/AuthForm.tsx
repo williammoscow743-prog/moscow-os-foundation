@@ -14,17 +14,32 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 type Mode = "signin" | "signup" | "forgot";
 
+// Mobile keyboards auto-capitalize and often append a trailing space, which
+// makes valid credentials fail. Normalize before validation and submission.
+const emailField = z
+  .string()
+  .transform((v) => v.trim().toLowerCase())
+  .pipe(z.string().email("Enter a valid email"));
+
 const signInSchema = z.object({
-  email: z.string().email("Enter a valid email"),
+  email: emailField,
   password: z.string().min(6, "At least 6 characters"),
   remember: z.boolean().optional(),
 });
 const signUpSchema = z.object({
   full_name: z.string().min(2, "Enter your name"),
-  email: z.string().email("Enter a valid email"),
+  email: emailField,
   password: z.string().min(8, "At least 8 characters"),
 });
-const forgotSchema = z.object({ email: z.string().email("Enter a valid email") });
+const forgotSchema = z.object({ email: emailField });
+
+const emailInputProps = {
+  type: "email",
+  inputMode: "email" as const,
+  autoCapitalize: "none",
+  autoCorrect: "off",
+  spellCheck: false,
+};
 
 export function AuthForm() {
   const [mode, setMode] = useState<Mode>("signin");
