@@ -57,25 +57,35 @@ type Props = {
 export function TaskDrawer({ taskId, open, onOpenChange }: Props) {
   const { data: task } = useTask(taskId ?? undefined);
   const updateMut = useUpdateTask();
+  const { user } = useAuth();
+  const { data: projects = [] } = useProjects();
+  const { data: milestones = [] } = useMilestones(task?.project_id ?? undefined);
 
   const status = (task?.status as TaskStatus) ?? "todo";
   const priority = (task?.priority as TaskPriority) ?? "medium";
 
+  const projectName = projects.find((p) => p.id === task?.project_id)?.name ?? "—";
+  const milestoneName =
+    milestones.find((m) => m.id === task?.milestone_id)?.title ?? "No milestone";
+  const assignee = !task?.assigned_to
+    ? "Unassigned"
+    : task.assigned_to === user?.id
+      ? (user?.email ?? "Me")
+      : task.assigned_to;
+
   const setStatus = async (v: TaskStatus) => {
     if (!task) return;
-    await updateMut.mutateAsync({
-      id: task.id,
-      patch: {
-        status: v,
-        completed_at: v === "completed" ? new Date().toISOString() : null,
-        progress: v === "completed" ? 100 : task.progress,
-      },
-    });
+    await updateMut.mutateAsync({ id: task.id, patch: statusChangePatch(task, v) });
   };
 
   const setPriority = async (v: TaskPriority) => {
     if (!task) return;
-    await updateMut.mutateAsync({ id: task.id, patch: { priority: v } });
+    await updateMut.mutateAsync({ id: task.id, patch: priorityChangePatch(v) });
+  };
+
+  const setDueDate = async (v: string) => {
+    if (!task) return;
+    await updateMut.mutateAsync({ id: task.id, patch: dueDatePatch(v) });
   };
 
   return (
