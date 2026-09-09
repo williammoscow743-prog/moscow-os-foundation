@@ -157,7 +157,38 @@ export function TaskDrawer({ taskId, open, onOpenChange }: Props) {
                     ))}
                   </SelectContent>
                 </Select>
+            </div>
+
+            <div className="mt-3 space-y-1.5">
+              <label className="text-xs font-medium text-muted-foreground" htmlFor="td-due">
+                Due date
+              </label>
+              <Input
+                id="td-due"
+                type="date"
+                value={task.due_date ?? ""}
+                onChange={(e) => setDueDate(e.target.value)}
+              />
+            </div>
+
+            <dl className="mt-4 grid grid-cols-1 gap-2 rounded-lg border border-border/60 bg-muted/40 p-3 text-sm sm:grid-cols-3">
+              <div>
+                <dt className="text-xs uppercase tracking-wider text-muted-foreground">Project</dt>
+                <dd className="mt-0.5 truncate">{projectName}</dd>
               </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wider text-muted-foreground">
+                  Milestone
+                </dt>
+                <dd className="mt-0.5 truncate">{milestoneName}</dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wider text-muted-foreground">Assignee</dt>
+                <dd className="mt-0.5 truncate">{assignee}</dd>
+              </div>
+            </dl>
+
+
             </div>
 
             <div className="mt-4">
