@@ -47,6 +47,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { dueDatePatch, priorityChangePatch, statusChangePatch } from "./task-form";
+import { useAuth } from "@/hooks/use-auth";
+import { useProjects } from "@/features/projects/api";
+import { useMilestones } from "@/features/milestones/api";
 
 type Props = {
   taskId: string | null;
