@@ -47,6 +47,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { dueDatePatch, priorityChangePatch, statusChangePatch } from "./task-form";
+import { useAuth } from "@/hooks/use-auth";
+import { useProjects } from "@/features/projects/api";
+import { useMilestones } from "@/features/milestones/api";
 
 type Props = {
   taskId: string | null;
@@ -57,25 +61,35 @@ type Props = {
 export function TaskDrawer({ taskId, open, onOpenChange }: Props) {
   const { data: task } = useTask(taskId ?? undefined);
   const updateMut = useUpdateTask();
+  const { user } = useAuth();
+  const { data: projects = [] } = useProjects();
+  const { data: milestones = [] } = useMilestones(task?.project_id ?? undefined);
 
   const status = (task?.status as TaskStatus) ?? "todo";
   const priority = (task?.priority as TaskPriority) ?? "medium";
 
+  const projectName = projects.find((p) => p.id === task?.project_id)?.name ?? "—";
+  const milestoneName =
+    milestones.find((m) => m.id === task?.milestone_id)?.title ?? "No milestone";
+  const assignee = !task?.assigned_to
+    ? "Unassigned"
+    : task.assigned_to === user?.id
+      ? (user?.email ?? "Me")
+      : task.assigned_to;
+
   const setStatus = async (v: TaskStatus) => {
     if (!task) return;
-    await updateMut.mutateAsync({
-      id: task.id,
-      patch: {
-        status: v,
-        completed_at: v === "completed" ? new Date().toISOString() : null,
-        progress: v === "completed" ? 100 : task.progress,
-      },
-    });
+    await updateMut.mutateAsync({ id: task.id, patch: statusChangePatch(task, v) });
   };
 
   const setPriority = async (v: TaskPriority) => {
     if (!task) return;
-    await updateMut.mutateAsync({ id: task.id, patch: { priority: v } });
+    await updateMut.mutateAsync({ id: task.id, patch: priorityChangePatch(v) });
+  };
+
+  const setDueDate = async (v: string) => {
+    if (!task) return;
+    await updateMut.mutateAsync({ id: task.id, patch: dueDatePatch(v) });
   };
 
   return (
@@ -143,7 +157,38 @@ export function TaskDrawer({ taskId, open, onOpenChange }: Props) {
                     ))}
                   </SelectContent>
                 </Select>
+            </div>
+
+            <div className="mt-3 space-y-1.5">
+              <label className="text-xs font-medium text-muted-foreground" htmlFor="td-due">
+                Due date
+              </label>
+              <Input
+                id="td-due"
+                type="date"
+                value={task.due_date ?? ""}
+                onChange={(e) => setDueDate(e.target.value)}
+              />
+            </div>
+
+            <dl className="mt-4 grid grid-cols-1 gap-2 rounded-lg border border-border/60 bg-muted/40 p-3 text-sm sm:grid-cols-3">
+              <div>
+                <dt className="text-xs uppercase tracking-wider text-muted-foreground">Project</dt>
+                <dd className="mt-0.5 truncate">{projectName}</dd>
               </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wider text-muted-foreground">
+                  Milestone
+                </dt>
+                <dd className="mt-0.5 truncate">{milestoneName}</dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wider text-muted-foreground">Assignee</dt>
+                <dd className="mt-0.5 truncate">{assignee}</dd>
+              </div>
+            </dl>
+
+
             </div>
 
             <div className="mt-4">
