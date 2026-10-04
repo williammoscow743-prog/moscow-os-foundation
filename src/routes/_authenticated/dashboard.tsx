@@ -27,6 +27,8 @@ import { useProfile } from "@/hooks/use-profile";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useAllMilestones } from "@/features/milestones/api";
+import { useAllTasks } from "@/features/tasks/api";
+import { format } from "date-fns";
 import type { MilestoneStatus } from "@/features/milestones/types";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -52,6 +54,26 @@ function DashboardPage() {
   });
 
   const { data: milestones = [] } = useAllMilestones();
+  const { data: tasks = [] } = useAllTasks();
+
+  const taskStats = useMemo(() => {
+    const todayIso = format(new Date(), "yyyy-MM-dd");
+    const weekIso = format(addDays(new Date(), 7), "yyyy-MM-dd");
+    let overdue = 0, dueToday = 0, completed = 0;
+    const upcoming: typeof tasks = [];
+    for (const t of tasks) {
+      if (t.status === "completed") { completed += 1; continue; }
+      if (!t.due_date) continue;
+      const d = t.due_date.slice(0, 10);
+      if (d < todayIso) overdue += 1;
+      else {
+        if (d === todayIso) dueToday += 1;
+        if (d <= weekIso) upcoming.push(t);
+      }
+    }
+    upcoming.sort((a, b) => (a.due_date! < b.due_date! ? -1 : 1));
+    return { overdue, dueToday, completed, upcoming };
+  }, [tasks]);
 
   const milestoneStats = useMemo(() => {
     const today = startOfDay(new Date());
@@ -124,8 +146,8 @@ function DashboardPage() {
           />
           <FocusCard
             label="Tasks due today"
-            value="0"
-            hint="Nothing on fire — enjoy the calm"
+            value={String(taskStats.dueToday)}
+            hint={taskStats.dueToday ? "Due before the day ends" : "Nothing on fire — enjoy the calm"}
             icon={CheckCircle2}
           />
           <FocusCard
@@ -135,6 +157,18 @@ function DashboardPage() {
             icon={Clock}
           />
         </div>
+      </Section>
+
+      {/* Tasks overview */}
+      <Section title="Tasks" subtitle="Where your work stands.">
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
+          <FocusCard label="Overdue" value={String(taskStats.overdue)} hint="Past due, not complete" icon={AlertTriangle} />
+          <FocusCard label="Upcoming" value={String(taskStats.upcoming.length)} hint="Due in the next 7 days" icon={CalendarClock} />
+          <FocusCard label="Completed" value={String(taskStats.completed)} hint="Tasks marked complete" icon={CheckCircle2} />
+        </div>
+        <Button variant="link" size="sm" className="px-0" onClick={() => navigate({ to: "/tasks" })}>
+          Go to tasks <ArrowUpRight className="ml-1 h-4 w-4" />
+        </Button>
       </Section>
 
       {/* Milestones overview */}
@@ -208,13 +242,35 @@ function DashboardPage() {
         </div>
 
         <div className="space-y-6">
-          <Section title="Upcoming tasks" subtitle="Next few days.">
+          <Section title="Upcoming tasks" subtitle="Next 7 days.">
             <div className="surface p-4">
-              <EmptyState
-                title="Nothing scheduled"
-                description="Tasks you create will surface here."
-                compact
-              />
+              {taskStats.upcoming.length > 0 ? (
+                <ul className="space-y-2">
+                  {taskStats.upcoming.slice(0, 5).map((t) => (
+                    <li key={t.id} className="flex items-center justify-between gap-2 text-sm">
+                      <span className="truncate font-medium">{t.title}</span>
+                      <span className="shrink-0 text-xs text-muted-foreground">
+                        {format(new Date(t.due_date!.slice(0, 10) + "T00:00:00"), "EEE d MMM")}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <EmptyState
+                  title="Nothing scheduled"
+                  description="Tasks you create will surface here."
+                  compact
+                />
+              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="mt-3 w-full"
+                onClick={() => navigate({ to: "/tasks" })}
+              >
+                View all tasks
+                <ArrowUpRight className="ml-1 h-4 w-4" />
+              </Button>
             </div>
           </Section>
 
