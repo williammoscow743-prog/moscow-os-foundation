@@ -27,6 +27,8 @@ import { useProfile } from "@/hooks/use-profile";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useAllMilestones } from "@/features/milestones/api";
+import { useAllTasks } from "@/features/tasks/api";
+import { format } from "date-fns";
 import type { MilestoneStatus } from "@/features/milestones/types";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -52,6 +54,26 @@ function DashboardPage() {
   });
 
   const { data: milestones = [] } = useAllMilestones();
+  const { data: tasks = [] } = useAllTasks();
+
+  const taskStats = useMemo(() => {
+    const todayIso = format(new Date(), "yyyy-MM-dd");
+    const weekIso = format(addDays(new Date(), 7), "yyyy-MM-dd");
+    let overdue = 0, dueToday = 0, completed = 0;
+    const upcoming: typeof tasks = [];
+    for (const t of tasks) {
+      if (t.status === "completed") { completed += 1; continue; }
+      if (!t.due_date) continue;
+      const d = t.due_date.slice(0, 10);
+      if (d < todayIso) overdue += 1;
+      else {
+        if (d === todayIso) dueToday += 1;
+        if (d <= weekIso) upcoming.push(t);
+      }
+    }
+    upcoming.sort((a, b) => (a.due_date! < b.due_date! ? -1 : 1));
+    return { overdue, dueToday, completed, upcoming };
+  }, [tasks]);
 
   const milestoneStats = useMemo(() => {
     const today = startOfDay(new Date());
