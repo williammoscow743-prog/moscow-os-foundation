@@ -146,8 +146,8 @@ function DashboardPage() {
           />
           <FocusCard
             label="Tasks due today"
-            value="0"
-            hint="Nothing on fire — enjoy the calm"
+            value={String(taskStats.dueToday)}
+            hint={taskStats.dueToday ? "Due before the day ends" : "Nothing on fire — enjoy the calm"}
             icon={CheckCircle2}
           />
           <FocusCard
@@ -157,6 +157,18 @@ function DashboardPage() {
             icon={Clock}
           />
         </div>
+      </Section>
+
+      {/* Tasks overview */}
+      <Section title="Tasks" subtitle="Where your work stands.">
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
+          <FocusCard label="Overdue" value={String(taskStats.overdue)} hint="Past due, not complete" icon={AlertTriangle} />
+          <FocusCard label="Upcoming" value={String(taskStats.upcoming.length)} hint="Due in the next 7 days" icon={CalendarClock} />
+          <FocusCard label="Completed" value={String(taskStats.completed)} hint="Tasks marked complete" icon={CheckCircle2} />
+        </div>
+        <Button variant="link" size="sm" className="px-0" onClick={() => navigate({ to: "/tasks" })}>
+          Go to tasks <ArrowUpRight className="ml-1 h-4 w-4" />
+        </Button>
       </Section>
 
       {/* Milestones overview */}
@@ -230,13 +242,35 @@ function DashboardPage() {
         </div>
 
         <div className="space-y-6">
-          <Section title="Upcoming tasks" subtitle="Next few days.">
+          <Section title="Upcoming tasks" subtitle="Next 7 days.">
             <div className="surface p-4">
-              <EmptyState
-                title="Nothing scheduled"
-                description="Tasks you create will surface here."
-                compact
-              />
+              {taskStats.upcoming.length > 0 ? (
+                <ul className="space-y-2">
+                  {taskStats.upcoming.slice(0, 5).map((t) => (
+                    <li key={t.id} className="flex items-center justify-between gap-2 text-sm">
+                      <span className="truncate font-medium">{t.title}</span>
+                      <span className="shrink-0 text-xs text-muted-foreground">
+                        {format(new Date(t.due_date!.slice(0, 10) + "T00:00:00"), "EEE d MMM")}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <EmptyState
+                  title="Nothing scheduled"
+                  description="Tasks you create will surface here."
+                  compact
+                />
+              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="mt-3 w-full"
+                onClick={() => navigate({ to: "/tasks" })}
+              >
+                View all tasks
+                <ArrowUpRight className="ml-1 h-4 w-4" />
+              </Button>
             </div>
           </Section>
 
