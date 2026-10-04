@@ -10,6 +10,8 @@ import { cn } from "@/lib/utils";
 import { formatCurrency } from "@/utils/format";
 
 import { useFinanceCalendarEvents } from "@/features/calendar/api";
+import { useTaskCalendarEvents } from "@/features/calendar/task-events";
+import { TaskDrawer } from "@/features/tasks/TaskDrawer";
 import { groupEventsByDate } from "@/features/calendar/finance-events";
 import {
   WEEKDAY_LABELS,
@@ -44,9 +46,9 @@ export const Route = createFileRoute("/_authenticated/calendar")({
   component: CalendarPage,
 });
 
-const ALL_SOURCES: CalendarSource[] = ["bill", "budget", "income", "expense"];
+const ALL_SOURCES: CalendarSource[] = ["bill", "budget", "income", "expense", "task"];
 
-const SOURCE_ROUTE: Record<CalendarSource, string> = {
+const SOURCE_ROUTE: Record<Exclude<CalendarSource, "task">, string> = {
   bill: "/finance/bills",
   budget: "/finance/budgets",
   income: "/finance/income",
@@ -57,20 +59,31 @@ function CalendarPage() {
   const navigate = useNavigate();
   const [month, setMonth] = useState(() => startOfMonth(new Date()));
   const [sources, setSources] = useState<CalendarSource[]>(ALL_SOURCES);
+  const [openTaskId, setOpenTaskId] = useState<string | null>(null);
 
   const range = useMemo(() => monthGridRange(month), [month]);
   const days = useMemo(() => buildMonthGrid(month), [month]);
-  const { data, isLoading, isError } = useFinanceCalendarEvents(range);
+  const finance = useFinanceCalendarEvents(range);
+  const tasks = useTaskCalendarEvents(range);
+  const isLoading = finance.isLoading || tasks.isLoading;
+  const isError = finance.isError || tasks.isError;
 
   const byDate = useMemo(
-    () => groupEventsByDate(filterEventsBySource(data ?? [], sources)),
-    [data, sources],
+    () =>
+      groupEventsByDate(
+        filterEventsBySource([...(finance.data ?? []), ...(tasks.data ?? [])], sources),
+      ),
+    [finance.data, tasks.data, sources],
   );
 
   const toggleSource = (s: CalendarSource) =>
     setSources((prev) => (prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]));
 
   const openEvent = (event: CalendarEvent) => {
+    if (event.source === "task") {
+      setOpenTaskId(event.recordId);
+      return;
+    }
     navigate({
       to: SOURCE_ROUTE[event.source],
       search: { record: event.recordId },
@@ -206,6 +219,12 @@ function CalendarPage() {
           </div>
         )}
       </div>
+
+      <TaskDrawer
+        taskId={openTaskId}
+        open={!!openTaskId}
+        onOpenChange={(o) => !o && setOpenTaskId(null)}
+      />
     </div>
   );
 }
